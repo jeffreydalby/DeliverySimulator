@@ -15,7 +15,17 @@ public class Customer {
 
     private String address; //derived from the location
     private Point location; //a point on a 10,000 x 10,000 unit grid
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public boolean isBirthDay() {
+        return birthDay;
+    }
+
     private String customerName; //Name
+    private boolean birthDay;
 
     public Customer(String customerName) {
         this(Address.getRandomGridPoint(),customerName);

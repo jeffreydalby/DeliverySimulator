@@ -1,29 +1,19 @@
 package edu.bu.met.cs665.products;
 
 //base class to create edu.bu.met.cs665.products from
-public class BaseProduct {
+public class BaseProduct implements Product {
     public boolean isKeepCold() {
         return keepCold;
     }
 
-    public void setKeepCold(boolean keepCold) {
-        this.keepCold = keepCold;
-    }
 
     public boolean isKeepWarm() {
         return keepWarm;
     }
 
-    public void setKeepWarm(boolean keepWarm) {
-        this.keepWarm = keepWarm;
-    }
 
     public ProductNames.names getProductType() {
         return productType;
-    }
-
-    public void setProductType(ProductNames.names productType) {
-        this.productType = productType;
     }
 
     public int getQuantity() {
