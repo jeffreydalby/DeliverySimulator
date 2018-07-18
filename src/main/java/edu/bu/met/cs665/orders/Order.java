@@ -9,23 +9,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private List<BaseProduct> orderItems = new ArrayList<>();
-    private boolean needsCold;
-    private boolean needsWarm;
-    private static int orderNumber;
-    private Customer customer;
 
-    public Order(Customer customer){
-        customer = customer;
-        orderNumber++;
+    public boolean isNeedsCold() {
+        return needsCold;
     }
 
-    //create the object from teh factory and add to the orderItems list
-    public void addItem(ProductNames.names itemToAdd, int quantity){
+    public boolean isNeedsWarm() {
+        return needsWarm;
+    }
 
-            needsCold = itemToAdd.isKeepCold();
-            needsWarm = itemToAdd.isKeepWarm();
-            orderItems.add(ProductsFactory.createProduct(itemToAdd,quantity));
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+
+    public Order(Customer customer) {
+        customer = customer;
+        currentOrderNumber++;
+        this.orderNumber = currentOrderNumber;
+    }
+
+    public List<BaseProduct> getOrderItems() {
+        return orderItems;
+    }
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    private Customer customer;
+    private boolean needsWarm;
+    private static int currentOrderNumber;
+    private int orderNumber;
+    private List<BaseProduct> orderItems = new ArrayList<>();
+    private boolean needsCold;
+
+
+    //create the object from teh factory and add to the orderItems list
+    public void addItem(ProductNames.names itemToAdd, int quantity) {
+
+        needsCold = itemToAdd.isKeepCold();
+        needsWarm = itemToAdd.isKeepWarm();
+        orderItems.add(ProductsFactory.createProduct(itemToAdd, quantity));
     }
 
     @Override
@@ -34,9 +60,9 @@ public class Order {
         StringBuilder returnString = new StringBuilder();
 
         returnString.append("");
-        for (BaseProduct product:orderItems
-             ) {
-            returnString.append(product +"\n");
+        for (BaseProduct product : orderItems
+                ) {
+            returnString.append(product + "\n");
 
         }
         return returnString.toString();
