@@ -1,6 +1,6 @@
-package products;
+package edu.bu.met.cs665.products;
 
-//base class to create products from
+//base class to create edu.bu.met.cs665.products from
 public class BaseProduct {
     public boolean isKeepCold() {
         return keepCold;

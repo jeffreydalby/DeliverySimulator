@@ -1,4 +1,4 @@
-package products;
+package edu.bu.met.cs665.products;
 
 //cold food factory
 public class ColdFoodCreator implements ProductCreator {
