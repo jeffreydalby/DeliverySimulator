@@ -1,22 +1,21 @@
-package edu.bu.met.cs665.deliverydrivers;
+package edu.bu.met.cs665.deliverysystem;
 
 import edu.bu.met.cs665.Display.Display;
-import edu.bu.met.cs665.deliverysystem.Delivery;
 import edu.bu.met.cs665.geography.Address;
 import edu.bu.met.cs665.geography.Distances;
 
 import java.awt.*;
 
-public class DeliveryDriver implements Observer, Runnable {
+public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
     public Point getCurrentLocation() {
         return currentLocation;
     }
 
-    public boolean isWarmer() {
+    public boolean hasWarmer() {
         return warmer;
     }
 
-    public boolean isCooler() {
+    public boolean hasCooler() {
         return cooler;
     }
 
@@ -54,8 +53,8 @@ public class DeliveryDriver implements Observer, Runnable {
         this.available = false;
         this.currentDelivery = delivery;
         this.currentDelivery.setPickedUp(true);
-        this.distanceToStore = (int) Distances.getDistanceBetweenPoints(this.currentLocation, delivery.getStore().getLocation());
-        this.distanceStoreToCustomer = (int) Distances.getDistanceBetweenPoints(delivery.getStore().getLocation(), delivery.getOrder().getCustomer().getLocation());
+        this.distanceToStore = (int) Distances.getDistanceBetweenPoints(this.currentLocation, delivery.getOrder().getStore().getLocation());
+        this.distanceStoreToCustomer = (int) Distances.getDistanceBetweenPoints(delivery.getOrder().getStore().getLocation(), delivery.getOrder().getCustomer().getLocation());
         this.pickingUp = true;
     }
 
@@ -76,7 +75,7 @@ public class DeliveryDriver implements Observer, Runnable {
                     if (distanceToStore <= 0) {
                         Display.output("Picking up Order #"
                                 + currentDelivery.getOrder().getOrderNumber()
-                                + "from " + this.currentDelivery.getStore().getName()
+                                + "from " + this.currentDelivery.getOrder().getStore().getName()
                                 + "\nDelivering to " + this.currentDelivery.getOrder().getCustomer().getAddress()
                                 + "\nOrder waited for " + this.currentDelivery.getWaitTime() + "time units");
 

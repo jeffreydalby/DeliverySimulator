@@ -2,9 +2,6 @@ package edu.bu.met.cs665.deliverysystem;
 
 import edu.bu.met.cs665.Main;
 import edu.bu.met.cs665.orders.Order;
-import edu.bu.met.cs665.stores.Store;
-
-import java.sql.Driver;
 
 public class Delivery {
 
@@ -28,16 +25,12 @@ public class Delivery {
         deliveryTime = Main.systemClock;
     }
 
-    public Driver getDriver() {
+    public DeliveryDriver getDeliveryDriver() {
         return driver;
     }
 
-    public void setDriver(Driver driver) {
+    public void setDeliveryDriver(DeliveryDriver driver) {
         this.driver = driver;
-    }
-
-    public Store getStore() {
-        return store;
     }
 
     public Order getOrder() {
@@ -47,16 +40,15 @@ public class Delivery {
     private Order order;
     private boolean pickedUp;
     private boolean delivered;
-    private Driver driver;
-    private Store store;
+    private DeliveryDriver driver;
     private int pickupTime;
     private int orderSubmittedTime; //just using an int to represent time
     private int deliveryTime;
 
-    public Delivery(Store store, Order order, int orderSubmittedTime){
-        this.store = store;
+    public Delivery(DeliveryDriver driver,Order order){
+        this.driver = driver;
         this.order = order;
-        this.orderSubmittedTime = orderSubmittedTime;
+        this.orderSubmittedTime = Main.systemClock;
     }
 
     public int getWaitTime(){

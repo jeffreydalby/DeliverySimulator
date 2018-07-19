@@ -4,6 +4,7 @@ import edu.bu.met.cs665.customers.Customer;
 import edu.bu.met.cs665.products.BaseProduct;
 import edu.bu.met.cs665.products.ProductNames;
 import edu.bu.met.cs665.products.ProductsFactory;
+import edu.bu.met.cs665.stores.Store;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +39,17 @@ public class Order {
         return orderNumber;
     }
 
+    public Store getStore() {
+        return store;
+    }
+
     private Customer customer;
     private boolean needsWarm;
     private static int currentOrderNumber;
     private int orderNumber;
     private List<BaseProduct> orderItems = new ArrayList<>();
     private boolean needsCold;
+    private Store store;
 
 
     //create the object from teh factory and add to the orderItems list

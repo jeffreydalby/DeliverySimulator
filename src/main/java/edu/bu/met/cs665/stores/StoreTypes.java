@@ -6,7 +6,7 @@ public class StoreTypes {
         chinese,
         flower,
         frozenDinner,
-        cakeAndIceCream,
+        desserts,
         southWestern,
         officeSupply,
     }
