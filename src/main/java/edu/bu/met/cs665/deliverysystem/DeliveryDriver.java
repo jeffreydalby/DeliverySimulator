@@ -1,6 +1,7 @@
 package edu.bu.met.cs665.deliverysystem;
 
 import edu.bu.met.cs665.Display.Display;
+import edu.bu.met.cs665.geography.Address;
 import edu.bu.met.cs665.geography.Distances;
 
 import java.awt.*;
@@ -63,6 +64,8 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
      */
     @Override
     public void update(Delivery delivery) {
+
+        System.out.println("Got delivery for: " + delivery.getOrder().getCustomer());
         this.available = false;
         this.currentDelivery = delivery;
         this.currentDelivery.setPickedUp(true);
@@ -80,6 +83,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
             int distanceTravelled = 0;
             //if the driver isn't available we can assume he has a delivery to make.
             if (!available && this.currentDelivery != null) {
+
                 //if we are picking up decrement the distance to the store
                 if (pickingUp) {
                     distanceToStore -= 10; //reduce by 100 cause we can travel one block a second in this world
@@ -88,9 +92,9 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                     if (distanceToStore <= 0) {
                         Display.output("Picking up Order #"
                                 + currentDelivery.getOrder().getOrderNumber()
-                                + "from " + this.currentDelivery.getOrder().getStore().getName()
+                                + " from " + this.currentDelivery.getOrder().getStore().getName()
                                 + "\nDelivering to " + this.currentDelivery.getOrder().getCustomer().getAddress()
-                                + "\nOrder waited for " + this.currentDelivery.getWaitTime() + "time units");
+                                + "\nOrder waited for " + this.currentDelivery.getWaitTime() + " time units");
 
                         pickingUp = false;
                     }
@@ -104,8 +108,8 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                     if (distanceStoreToCustomer <= 0) {
                         Display.output("Delivered Order #"
                                 + currentDelivery.getOrder().getOrderNumber()
-                                + "to " + this.currentDelivery.getOrder().getCustomer().getCustomerName()
-                                + "\n at " + this.currentDelivery.getOrder().getCustomer().getAddress());
+                                + " to " + this.currentDelivery.getOrder().getCustomer().getCustomerName()
+                                + "\nat " + this.currentDelivery.getOrder().getCustomer().getAddress());
                         this.deliverOrder();  //deliver the order and reset for the next one
                     }
 
@@ -113,9 +117,9 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
 
             }
 
-            //We are going to sleep for a millisecond each time
+            //We are going to sleep for a 10 millisecond each time
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 Display.output("Driver: " + this.driverName + " went to sleep");
@@ -145,7 +149,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         return ("Name: "
                 + this.driverName + "\n"
                 + "Current Location: "
-                + this.currentLocation + "\n"
+                + Address.getAddress(this.currentLocation) + "\n"
                 + "Has cooler: " + hasCooler()
                 + "\n" + "Has warmer: " + hasWarmer() + "\n" +
                 "Is available: " + available + "\n");

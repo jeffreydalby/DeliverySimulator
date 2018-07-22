@@ -6,5 +6,6 @@ public interface Product {
     boolean isKeepWarm();
     int getQuantity();
     void setQuantity(int quantity);
+   // ProductNames.names productName = ProductNames.names.chocolates;
     ProductNames.names getProductType();
 }

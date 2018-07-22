@@ -7,6 +7,7 @@ public class ClockTicker implements Runnable {
     while (true) {
       if(Thread.currentThread().isInterrupted()) break;
       Main.systemClock++;
+
       try {
         Thread.sleep(CLOCK_SPEED);
       } catch (InterruptedException ex) {

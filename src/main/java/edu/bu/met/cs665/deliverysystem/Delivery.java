@@ -13,7 +13,7 @@ public class Delivery {
 
     public void setPickedUp(boolean pickedUp) {
         this.pickedUp = pickedUp;
-        pickupTime = Main.systemClock;
+        this.pickupTime = Main.systemClock;
     }
 
     public boolean isDelivered() {
@@ -22,7 +22,7 @@ public class Delivery {
 
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
-        deliveryTime = Main.systemClock;
+        this.deliveryTime = Main.systemClock;
     }
 
     public DeliveryDriver getDeliveryDriver() {
@@ -49,6 +49,7 @@ public class Delivery {
         this.driver = driver;
         this.order = order;
         this.orderSubmittedTime = Main.systemClock;
+        System.out.println("Order submitted time:" + this.orderSubmittedTime);
     }
 
     public int getWaitTime(){

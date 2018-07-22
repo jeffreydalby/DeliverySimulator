@@ -25,8 +25,9 @@ public class Order {
     }
 
 
-    public Order(Customer customer) {
-        customer = customer;
+    public Order(Customer customer, Store store) {
+        this.customer = customer;
+        this.store = store;
         currentOrderNumber++;
         this.orderNumber = currentOrderNumber;
     }
@@ -64,6 +65,10 @@ public class Order {
     public String toString() {
         //build out our list of order entries
         StringBuilder returnString = new StringBuilder();
+        returnString.append("Ordered from: " + this.store.getName()+"\n");
+        returnString.append("Located at:" + this.store.getAddress() +"\n");
+        returnString.append("Customer Name: " + this.customer.getCustomerName() +"\n");
+        returnString.append("Customer Address: " + this.customer.getAddress() +"\n");
 
         returnString.append("");
         for (BaseProduct product : orderItems

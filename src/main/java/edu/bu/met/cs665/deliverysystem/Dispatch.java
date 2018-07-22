@@ -75,7 +75,6 @@ public class Dispatch implements Subject, Runnable {
             if (Thread.currentThread().isInterrupted()) break;
             //check for order in the queue
             if (!orders.isEmpty()) {
-                Display.output("Checking for next order");
                 nextOrder = orders.removeFirst();
                 driver = getNearestAvailableDriver(nextOrder.getCustomer().getLocation(),
                         nextOrder.getStore().getLocation(),
@@ -120,6 +119,7 @@ public class Dispatch implements Subject, Runnable {
     }
 
     private DeliveryDriver getNearestAvailableDriver(Point customerLocation, Point storeLocation, boolean needsHot, boolean needsCold, boolean isRushHour) {
+
         DeliveryDriver returnDriver = null;
         //initialize to max so we know we'll get the closest
         Double closestValue = Double.MAX_VALUE;
@@ -148,6 +148,8 @@ public class Dispatch implements Subject, Runnable {
             }
         }
         else Display.output("No Drivers Registered");
+        if (returnDriver !=null)
+        Display.output("Found driver:" + returnDriver);
         return returnDriver;
     }
 

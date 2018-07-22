@@ -1,6 +1,6 @@
 package edu.bu.met.cs665;
 
-import edu.bu.met.cs665.deliverysystem.Dispatch;
+import edu.bu.met.cs665.simulator.SetupSystem;
 
 public class Main{
 
@@ -17,9 +17,8 @@ public class Main{
     ClockTicker ticker = new ClockTicker();
     Thread tickerThread = new Thread(ticker);
     tickerThread.start();
-    Dispatch dispather = Dispatch.getInstance();
-    Thread dispatchThread = new Thread(dispather);
-    dispatchThread.start();
+    SetupSystem primarySimulator = new SetupSystem();
+    primarySimulator.createSimulation(10,10,40,100,10);
 
   }
 

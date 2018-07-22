@@ -3,7 +3,6 @@ package edu.bu.met.cs665.simulator;
 import edu.bu.met.cs665.customers.Customer;
 import edu.bu.met.cs665.customers.SystemCustomers;
 import edu.bu.met.cs665.deliverysystem.DeliveryDriver;
-import edu.bu.met.cs665.deliverysystem.Dispatch;
 import edu.bu.met.cs665.geography.Address;
 import edu.bu.met.cs665.stores.GenericStoreBuilder;
 import edu.bu.met.cs665.stores.StoreTypes;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class SetupSystem {
 
-    public void createSimulation(Dispatch dispatcher, int numStores, int numDrivers, int numCustomers, int numOrders, int milliSecondsBetweenOrders) {
+    public void createSimulation(int numStores, int numDrivers, int numCustomers, int numOrders, int milliSecondsBetweenOrders) {
 
         //first create the stores
         createSimulationStores(numStores);
@@ -30,6 +29,8 @@ public class SetupSystem {
     }
 
     private void startOrderSimulator(int numOrders, int milliSecondsBetweenOrders) {
+        OrderSimulator simulatorInstance = OrderSimulator.getInstance();
+        simulatorInstance.StartSimulation(100,10);
     }
 
 
@@ -37,9 +38,9 @@ public class SetupSystem {
         DeliveryDriver deliveryDriver;
         PeopleNameGenerator peopleNameGenerator = new PeopleNameGenerator();
         Random rnd = new Random();
-        //30% chance car has cooler or heater
+        //30% chance car has cooler most have heaters
         boolean hasCooler = rnd.nextInt(10) < 3;
-        boolean hasHeater = rnd.nextInt(10) < 3;
+        boolean hasHeater = rnd.nextInt(10) < 8;
 
         //we always create one driver with a heater and a cooler to make sure we have that
         deliveryDriver = new DeliveryDriver(peopleNameGenerator.getName(),Address.getRandomGridPoint(),true,true);
