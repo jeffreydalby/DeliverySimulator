@@ -2,14 +2,7 @@ package edu.bu.met.cs665.simulator;
 
 public interface NameGenerator {
 
-    enum NameTypes {customer,
-        pizza,
-        chinese,
-        flower,
-        frozenDinner,
-        desserts,
-        southWestern,
-        officeSupply,}
+
 
     static String[][] peopleNames= {{"Bob","Smith"},{"Jack","Parker"},{"Sophia","Johnson"},
             {"Jacob","Williams"},{"Emma", "Brown"}, {"Mason","Jones"},{"Emily","Miller"},{"Madison","Wilson"},

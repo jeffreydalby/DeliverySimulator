@@ -1,7 +1,7 @@
 package edu.bu.met.cs665.stores;
 
 public class StoreTypes {
-    enum type {
+    public enum type {
         pizza,
         chinese,
         flower,

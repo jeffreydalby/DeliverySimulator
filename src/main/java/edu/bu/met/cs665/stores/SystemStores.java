@@ -26,4 +26,16 @@ public class SystemStores {
         return storesInstance;
     }
 
+    @Override
+    public String toString() {
+        //return all the stores in the system
+      StringBuilder returnString = new StringBuilder();
+        for (Store store:stores
+             ) {
+
+            returnString.append(store.toString()+ "\n");
+
+        }
+        return returnString.toString();
+    }
 }

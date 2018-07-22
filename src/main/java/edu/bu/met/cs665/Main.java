@@ -17,7 +17,7 @@ public class Main{
     ClockTicker ticker = new ClockTicker();
     Thread tickerThread = new Thread(ticker);
     tickerThread.start();
-    Dispatch dispather = new Dispatch();
+    Dispatch dispather = Dispatch.getInstance();
     Thread dispatchThread = new Thread(dispather);
     dispatchThread.start();
 

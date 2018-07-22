@@ -9,12 +9,36 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-
+//singleton, only one dispatcher per system
 public class Dispatch implements Subject, Runnable {
+
+    private static Dispatch dispatchInstance;
+
+    public Thread getDispatchThread() {
+        return dispatchThread;
+    }
+
+    private Thread dispatchThread;
+
+
+    public static Map<String, DeliveryVehicle> getDriverMap() {
+        return driverMap;
+    }
 
     private static Map<String, DeliveryVehicle> driverMap = new HashMap<>();
     private static Deque<Order> orders = new ArrayDeque<>();
     private static List<Delivery> deliveryList = new ArrayList<>();
+
+    private Dispatch(){
+        dispatchThread = new Thread(this);
+        dispatchThread.start();
+    }
+
+    public static synchronized Dispatch getInstance(){
+        if(dispatchInstance == null) dispatchInstance = new Dispatch();
+        return dispatchInstance;
+    }
+
 
     @Override
     public void registerObserver(String identity, DeliveryVehicle vehicle) {
@@ -27,9 +51,11 @@ public class Dispatch implements Subject, Runnable {
         driverMap.remove(observer);
     }
 
+    //The dispatch system is responsible for sending out notifications to the available driver
+    // and doesn't have a need to multicast
     @Override
-    public void notifyObserver() {
-
+    public void notifyObserver(DeliveryDriver deliveryDriver, Delivery delivery) {
+        deliveryDriver.update(delivery);
     }
 
     @Override
@@ -77,6 +103,7 @@ public class Dispatch implements Subject, Runnable {
             catch (InterruptedException ex){
                 //reset thread so while loop catches it
                 Thread.currentThread().isInterrupted();
+                Display.output("Killed Dispatch Thread");
 
             }
         }
@@ -87,7 +114,8 @@ public class Dispatch implements Subject, Runnable {
     private void createDelivery(DeliveryDriver driver, Order order) {
         Delivery newDelivery = new Delivery(driver, order);
         deliveryList.add(newDelivery);
-        driver.update(newDelivery);
+        //notify the driver
+        notifyObserver(driver,newDelivery);
 
     }
 
@@ -125,5 +153,13 @@ public class Dispatch implements Subject, Runnable {
 
     public void placeOrder(Order order) {
         orders.addLast(order);
+    }
+
+    @Override
+    public String toString() {
+        //return our list of drivers
+        StringBuilder returnString = new StringBuilder();
+        driverMap.forEach((k,v)->returnString.append(v.toString() + "\n"));
+        return  returnString.toString();
     }
 }

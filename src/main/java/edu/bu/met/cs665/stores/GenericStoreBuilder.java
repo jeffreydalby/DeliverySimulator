@@ -1,8 +1,5 @@
 package edu.bu.met.cs665.stores;
 
-import edu.bu.met.cs665.geography.Address;
-import edu.bu.met.cs665.products.ProductClassification;
-
 import java.awt.*;
 import java.util.List;
 
@@ -10,10 +7,11 @@ import java.util.List;
 //and the name of the store.
 public class GenericStoreBuilder implements StoreBuilder{
     @Override
-    public Store buildStore(String name, List<ProductClassification.type> typeOfStore) {
-        Point randomLocation = Address.getRandomGridPoint();
-        String streetName = Address.getAddress(randomLocation);
-        Store newStore = new Store(name, randomLocation,streetName,StoreBuilder.getMenuItems(typeOfStore)) ;
+    public Store buildStore(String name, Point location, String streetName, List<StoreTypes.type> typeOfStore) {
+
+        Store newStore = new Store(name, location,streetName,StoreBuilder.getMenuItems(typeOfStore),typeOfStore) ;
         return newStore;
     }
+
+
 }

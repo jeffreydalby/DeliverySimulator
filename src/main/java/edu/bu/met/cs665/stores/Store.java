@@ -29,16 +29,18 @@ public class Store {
     }
 
     private String name;
+    private List<StoreTypes.type> storeClassification;
 
     public Store(String name){
         this.name = name;
     }
 
-    public Store(String name, Point location, String address, List<Product> stockItems){
+    public Store(String name, Point location, String address, List<Product> stockItems, List<StoreTypes.type> storeClassification){
         this.name = name;
         this.location = location;
         this.address = address;
         this.stockItems = stockItems;
+        this.storeClassification = storeClassification;
     }
 
     public void addStockItem(BaseProduct productToAdd){
@@ -54,10 +56,16 @@ public class Store {
 
     @Override
     public String toString() {
-        String returnString = "Store{" +
-                ", name='" + name + '\'' +
+        String storeTypes = "";
+        for (StoreTypes.type storeType:storeClassification
+             ) {
+            storeTypes+=storeType.toString() + " ";
+        }
+
+        String returnString = "Store{name='" + name + '\'' +
                 ", location=" + location +
                 ", address='" + address + '\'' +
+                ", store types= " + storeTypes +
                 '}';
 
         return returnString;

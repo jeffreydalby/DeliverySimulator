@@ -8,4 +8,5 @@ public interface DeliveryVehicle {
     boolean hasWarmer();
     boolean hasCooler();
     boolean isAvailable();
+    Thread getDriverThread();
 }

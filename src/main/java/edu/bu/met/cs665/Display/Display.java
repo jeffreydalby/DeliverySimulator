@@ -4,7 +4,7 @@ package edu.bu.met.cs665.Display;
 public class Display {
 
     //synched to prevent overlapping output
-    public synchronized static void output(String stringToDisplay){
+    public synchronized static void output(String stringToDisplay) {
         System.out.println(stringToDisplay);
     }
 }

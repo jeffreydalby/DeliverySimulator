@@ -1,7 +1,6 @@
 package edu.bu.met.cs665.deliverysystem;
 
 import edu.bu.met.cs665.Display.Display;
-import edu.bu.met.cs665.geography.Address;
 import edu.bu.met.cs665.geography.Distances;
 
 import java.awt.*;
@@ -23,6 +22,12 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         return available;
     }
 
+
+    public Thread getDriverThread() {
+        return driverThread;
+    }
+
+    private Thread driverThread;
     private Point currentLocation;
     private boolean warmer;
     private boolean cooler;
@@ -35,12 +40,20 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
 
     //create the driver and give him a random starting location
     //set up with a cooler, warmer or both
-    public DeliveryDriver(String driverName, boolean hasWarmer, boolean hasCooler) {
+    public DeliveryDriver(String driverName, Point currentLocation, boolean hasWarmer, boolean hasCooler) {
         this.driverName = driverName;
-        this.currentLocation = Address.getRandomGridPoint();
+        this.currentLocation = currentLocation;
         this.warmer = hasWarmer;
         this.cooler = hasCooler;
         this.available = true;
+        this.currentDelivery = null;
+
+        //register the driver
+        Dispatch dispatch = Dispatch.getInstance();
+        dispatch.registerObserver(this.driverName, this);
+        //start them driving
+        driverThread = new Thread(this);
+        driverThread.start();
     }
 
     /**
@@ -101,12 +114,11 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
             }
 
             //We are going to sleep for a millisecond each time
-            try{
+            try {
                 Thread.sleep(1000);
-            }
-            catch (InterruptedException ex){
+            } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
-                Display.output("Driver:" + this.driverName + "couldn't sleep");
+                Display.output("Driver: " + this.driverName + " went to sleep");
             }
 
         }
@@ -120,11 +132,22 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         this.currentDelivery.setDelivered(true);
         this.available = true;
         Display.output("Delivered at time code: " + this.currentDelivery.getDeliveredTime()
-                +" Total delivery time was: " + this.currentDelivery.getDeliveredTime());
+                + " Total delivery time was: " + this.currentDelivery.getDeliveredTime());
         this.currentDelivery = null;
         //set to -1 to indicate not in use
         this.distanceStoreToCustomer = -1;
         this.distanceToStore = -1;
 
+    }
+
+    @Override
+    public String toString() {
+        return ("Name: "
+                + this.driverName + "\n"
+                + "Current Location: "
+                + this.currentLocation + "\n"
+                + "Has cooler: " + hasCooler()
+                + "\n" + "Has warmer: " + hasWarmer() + "\n" +
+                "Is available: " + available + "\n");
     }
 }

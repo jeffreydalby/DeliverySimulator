@@ -27,5 +27,13 @@ public class SystemCustomers {
         return customersInstance;
     }
 
-
+    @Override
+    public String toString() {
+        StringBuilder returnString = new StringBuilder();
+        for (Customer customer:customers
+             ) {
+            returnString.append(customer.toString() + "\n");
+        }
+        return returnString.toString();
+    }
 }
