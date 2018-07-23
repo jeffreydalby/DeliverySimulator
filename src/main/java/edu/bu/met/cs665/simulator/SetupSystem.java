@@ -1,10 +1,15 @@
 package edu.bu.met.cs665.simulator;
 
+import edu.bu.met.cs665.ClockTicker;
+import edu.bu.met.cs665.Display.Display;
 import edu.bu.met.cs665.customers.Customer;
 import edu.bu.met.cs665.customers.SystemCustomers;
 import edu.bu.met.cs665.deliverysystem.DeliveryDriver;
+import edu.bu.met.cs665.deliverysystem.DeliveryVehicle;
+import edu.bu.met.cs665.deliverysystem.Dispatch;
 import edu.bu.met.cs665.geography.Address;
 import edu.bu.met.cs665.stores.GenericStoreBuilder;
+import edu.bu.met.cs665.stores.Store;
 import edu.bu.met.cs665.stores.StoreTypes;
 import edu.bu.met.cs665.stores.SystemStores;
 
@@ -30,9 +35,26 @@ public class SetupSystem {
 
     private void startOrderSimulator(int numOrders, int milliSecondsBetweenOrders) {
         OrderSimulator simulatorInstance = OrderSimulator.getInstance();
-        simulatorInstance.StartSimulation(100,10);
+        simulatorInstance.StartSimulation(numOrders,milliSecondsBetweenOrders);
     }
 
+    public static void stopSimulation(){
+        Dispatch dispatchInstance = Dispatch.getInstance();
+        ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
+
+        Display.output("No More work to do, shutting down.");
+        Display.output("Sending Drivers Home");
+        for (DeliveryVehicle delivieryDriver:dispatchInstance.getDriverMap().values()
+             ) {delivieryDriver.getDriverThread().interrupt(); }
+        Display.output("Stopping dispatcher");
+        dispatchInstance.getDispatchThread().interrupt();
+        Display.output("Stopping Clock");
+        clockTickerInstance.getClockTickerThread().interrupt();
+        Display.output("Simulation Complete"
+                + "\nElapsed Time =" + ClockTicker.systemClock
+                + "\nShutting Down");
+
+    }
 
     private void createDrivers(int numDrivers) {
         DeliveryDriver deliveryDriver;
@@ -46,12 +68,12 @@ public class SetupSystem {
         deliveryDriver = new DeliveryDriver(peopleNameGenerator.getName(),Address.getRandomGridPoint(),true,true);
         //Display.output("Created new driver: " +deliveryDriver );
 
-        for (int i = 0; i < numDrivers; i++) {
+        for (int i = 0; i < numDrivers -1 ; i++) {
             deliveryDriver = new DeliveryDriver(peopleNameGenerator.getName(),Address.getRandomGridPoint(),hasHeater,hasCooler);
             //get new randoms
             hasCooler = rnd.nextInt(10) < 3;
             hasHeater = rnd.nextInt(10) < 3;
-           // Display.output("Created new driver: " +deliveryDriver );
+            Display.output("Created new driver: \n" + deliveryDriver.toString());
 
         }
     }
@@ -73,13 +95,16 @@ public class SetupSystem {
         GenericStoreBuilder genericStoreBuilder = new GenericStoreBuilder();
         List<StoreTypes.type> storeType = new ArrayList<>(); //holdre for type fo store to build
         Point storeLocation = new Point();
+        Store newStore;
 
 
         for (int i = 0; i < numStores; i++) {
             //give an 90 percent change of not hybrid (only when random int = 0)
             storeType = getStoreType(rnd.nextInt(10) < 1);
             storeLocation = Address.getRandomGridPoint();
-            systemStores.addStore(genericStoreBuilder.buildStore(storeNamer.getRandomName(storeType), storeLocation, Address.getAddress(storeLocation), storeType));
+            newStore = genericStoreBuilder.buildStore(storeNamer.getRandomName(storeType), storeLocation, Address.getAddress(storeLocation), storeType);
+            systemStores.addStore(newStore);
+            Display.output("Created new store: \n" + newStore);
         }
 
     }

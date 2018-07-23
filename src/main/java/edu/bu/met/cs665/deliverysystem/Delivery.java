@@ -1,6 +1,6 @@
 package edu.bu.met.cs665.deliverysystem;
 
-import edu.bu.met.cs665.Main;
+import edu.bu.met.cs665.ClockTicker;
 import edu.bu.met.cs665.orders.Order;
 
 public class Delivery {
@@ -13,7 +13,7 @@ public class Delivery {
 
     public void setPickedUp(boolean pickedUp) {
         this.pickedUp = pickedUp;
-        this.pickupTime = Main.systemClock;
+        this.pickupTime = ClockTicker.systemClock;
     }
 
     public boolean isDelivered() {
@@ -22,7 +22,7 @@ public class Delivery {
 
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
-        this.deliveryTime = Main.systemClock;
+        this.deliveryTime = ClockTicker.systemClock;
     }
 
     public DeliveryDriver getDeliveryDriver() {
@@ -31,6 +31,14 @@ public class Delivery {
 
     public void setDeliveryDriver(DeliveryDriver driver) {
         this.driver = driver;
+    }
+
+    public boolean getRefergerated() {
+        return refergerated;
+    }
+
+    public void setRefergerated(boolean refergerated) {
+        this.refergerated = refergerated;
     }
 
     public Order getOrder() {
@@ -44,12 +52,12 @@ public class Delivery {
     private int pickupTime;
     private int orderSubmittedTime; //just using an int to represent time
     private int deliveryTime;
+    private boolean refergerated;
 
     public Delivery(DeliveryDriver driver,Order order){
         this.driver = driver;
         this.order = order;
-        this.orderSubmittedTime = Main.systemClock;
-        System.out.println("Order submitted time:" + this.orderSubmittedTime);
+        this.orderSubmittedTime = ClockTicker.systemClock;
     }
 
     public int getWaitTime(){

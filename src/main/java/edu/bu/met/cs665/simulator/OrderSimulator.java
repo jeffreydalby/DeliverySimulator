@@ -9,6 +9,7 @@ import edu.bu.met.cs665.deliverysystem.Delivery;
 import edu.bu.met.cs665.deliverysystem.Dispatch;
 import edu.bu.met.cs665.orders.Order;
 import edu.bu.met.cs665.products.Product;
+import edu.bu.met.cs665.products.ProductNames;
 import edu.bu.met.cs665.stores.Store;
 import edu.bu.met.cs665.stores.SystemStores;
 
@@ -27,6 +28,12 @@ public class OrderSimulator implements Runnable {
     private OrderSimulator(){}
     private int milliSecondsBetweenOrders;
     private int numOrders;
+
+    public boolean isCreatingOrders() {
+        return creatingOrders;
+    }
+
+    private boolean creatingOrders;
 
 
     public static synchronized OrderSimulator getInstance(){
@@ -53,11 +60,13 @@ public class OrderSimulator implements Runnable {
         Store store;
         Order order;
         List<Product> orderItems;
+        boolean isBirthday;
 
 
         //loop through the number of orders we want to create
 
         for (int i = 0; i < this.numOrders; i++) {
+            creatingOrders = true;
             if(Thread.currentThread().isInterrupted()) break;
 
             //pick a random store
@@ -72,6 +81,11 @@ public class OrderSimulator implements Runnable {
             customer = SystemCustomers.getInstance().getCustomers().get(rnd.nextInt(SystemCustomers.getInstance().getCustomers().size()));
 
             order = new Order(customer,store);
+
+            //randomly decide if it is the persons birthday 20% .
+            isBirthday = rnd.nextInt(10) < 2;
+            if(isBirthday) order.addItem(ProductNames.names.giftBox,1);
+
             //add a random number of things to the order
             int numOrderItems = (rnd.nextInt(orderItems.size())+1);
             for (int j = 0; j < numOrderItems; j++) {
@@ -90,7 +104,7 @@ public class OrderSimulator implements Runnable {
             }
 
         }
-
+        creatingOrders = false;
         Display.output("All orders created");
 
 

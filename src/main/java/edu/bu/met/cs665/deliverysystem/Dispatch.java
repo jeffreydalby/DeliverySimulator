@@ -1,9 +1,11 @@
 package edu.bu.met.cs665.deliverysystem;
 
+import edu.bu.met.cs665.ClockTicker;
 import edu.bu.met.cs665.Display.Display;
-import edu.bu.met.cs665.Main;
 import edu.bu.met.cs665.geography.Distances;
 import edu.bu.met.cs665.orders.Order;
+import edu.bu.met.cs665.simulator.OrderSimulator;
+import edu.bu.met.cs665.simulator.SetupSystem;
 
 import java.awt.*;
 import java.util.*;
@@ -30,8 +32,8 @@ public class Dispatch implements Subject, Runnable {
     private static List<Delivery> deliveryList = new ArrayList<>();
 
     private Dispatch(){
-        dispatchThread = new Thread(this);
-        dispatchThread.start();
+        this.dispatchThread = new Thread(this);
+        this.dispatchThread.start();
     }
 
     public static synchronized Dispatch getInstance(){
@@ -63,41 +65,65 @@ public class Dispatch implements Subject, Runnable {
         Order nextOrder;
         DeliveryDriver driver;
         boolean rushHour;
+        //get the order system so we can exit cleanly
+        OrderSimulator orderSimulatorInstance = OrderSimulator.getInstance();
+
 
         //create a loop to run constantly
         while (true) {
-            //check if it is "rush hour" which we a simulating by the fake system clock%2 = 0;
-            if (Main.systemClock % 2 == 0) rushHour = true;
-            else rushHour = false;
-
-
             //check if we have been interrupted
             if (Thread.currentThread().isInterrupted()) break;
-            //check for order in the queue
-            if (!orders.isEmpty()) {
+            //check if it is "rush hour" which occurs between ticker time 20 and 80 (won't hit this with less than 20 orders)
+            if (ClockTicker.systemClock > 20 && ClockTicker.systemClock < 80) rushHour = true;
+            else rushHour = false;
+            Display.output("Dispatch Update:"
+                    + "\nNumber of orders: " +orders.size()
+                    + "\nDrivers Waiting on Assignment: "+ driverMap.values().stream().filter(theDrivers->theDrivers.isAvailable()).count()
+                    + "\nCurrently Rush hour: " + rushHour);
+
+
+
+            //check for order in the queue and at least one available driver
+            if (!orders.isEmpty() && driverMap.values().stream().anyMatch(thisDriver->thisDriver.isAvailable())) {
                 nextOrder = orders.removeFirst();
+
+
                 driver = getNearestAvailableDriver(nextOrder.getCustomer().getLocation(),
                         nextOrder.getStore().getLocation(),
                         nextOrder.isNeedsWarm(),
                         nextOrder.isNeedsCold(),
                         rushHour);
                 if (driver != null) {
+                    //let people know we have a traffic event
+                    if(rushHour && nextOrder.isNeedsCold()) Display.output("Traffic event, routing refrigerated truck.");
                     //create the delivery and notify the driver
-                    createDelivery(driver, nextOrder);
+                    createDelivery(driver, nextOrder,rushHour && nextOrder.isNeedsCold());
                 }
                 //no driver matches so the poor person gets their order sent to the bottom of the queue
-                //TODO consider implementing a priority queue so we can bubble things up to the top
+                //consider implementing a priority queue so we can bubble things up to the top
                 else {
-                    orders.addFirst(nextOrder);
+                    orders.addLast(nextOrder);
                 }
 
             }
             else
-                Display.output("Order Queue is Empty!");
+                if (orders.isEmpty())
+                {
+                    Display.output("Order Queue is Empty!");
+                    //if the order system is done creating orders and all drivers are available
+                    // and the order queus is empty we can assume we are done
+                    if(!orderSimulatorInstance.isCreatingOrders() && !driverMap.values().stream().anyMatch(theDrivers->!theDrivers.isAvailable())){
+                        SetupSystem.stopSimulation();
+                        if (Thread.currentThread().isInterrupted()) break;
+                    }
+
+                }
+
+
 
 
             try{
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             }
             catch (InterruptedException ex){
                 //reset thread so while loop catches it
@@ -110,8 +136,9 @@ public class Dispatch implements Subject, Runnable {
 
     }
 
-    private void createDelivery(DeliveryDriver driver, Order order) {
+    private void createDelivery(DeliveryDriver driver, Order order, boolean rushHour) {
         Delivery newDelivery = new Delivery(driver, order);
+        newDelivery.setRefergerated(rushHour);
         deliveryList.add(newDelivery);
         //notify the driver
         notifyObserver(driver,newDelivery);
@@ -119,16 +146,17 @@ public class Dispatch implements Subject, Runnable {
     }
 
     private DeliveryDriver getNearestAvailableDriver(Point customerLocation, Point storeLocation, boolean needsHot, boolean needsCold, boolean isRushHour) {
-
         DeliveryDriver returnDriver = null;
         //initialize to max so we know we'll get the closest
-        Double closestValue = Double.MAX_VALUE;
+        double closestValue = Double.MAX_VALUE;
         //make sure we have drivers
         if (!driverMap.isEmpty()) {
             for (DeliveryVehicle vehicle : driverMap.values()
                     ) {
                 //Available vehicles, if it needs heat make sure we have a heater
-                if (vehicle.isAvailable() && (vehicle.hasWarmer() == needsHot)) {
+                if (vehicle.isAvailable()) {
+                    //if it needs to be heated and the car has no warmer move on
+                    if(needsHot && !vehicle.hasWarmer()) continue;
 
                     double storeToCustomerDistance = Distances.getDistanceBetweenPoints(customerLocation, storeLocation);
                     //if it needs cold we have to check distance and if it is rush hour
@@ -136,8 +164,8 @@ public class Dispatch implements Subject, Runnable {
                     if (needsCold && isRushHour) {
                         if (!vehicle.hasCooler()) continue;
                     }
-                    //if the distance is > 2000 units (20 blocks) and no cooler move on
-                    if (storeToCustomerDistance >= 2000 && !vehicle.hasCooler()) continue;
+                    //if the distance is > 2000 units (20 blocks) and no cooler and needs cold move on
+                    if (storeToCustomerDistance >= 2000 && !vehicle.hasCooler() && needsCold) continue;
                     //figure out if this is the closest vehicle
                     double thisVehicleDistance = Distances.getDistanceBetweenPoints(storeLocation, vehicle.getCurrentLocation());
                     if (thisVehicleDistance < closestValue) {
@@ -149,11 +177,14 @@ public class Dispatch implements Subject, Runnable {
         }
         else Display.output("No Drivers Registered");
         if (returnDriver !=null)
-        Display.output("Found driver:" + returnDriver);
+        Display.output("Found nearest available driver: " + returnDriver.getDriverName() +"\nDistance to store: " + (int)closestValue + " blocks");
         return returnDriver;
     }
 
     public void placeOrder(Order order) {
+        Display.output(  "New Order From Customer: \n"
+                + "Order #" + order.getOrderNumber()
+                +" \n" + order.toString());
         orders.addLast(order);
     }
 

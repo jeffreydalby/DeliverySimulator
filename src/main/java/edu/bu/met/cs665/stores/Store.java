@@ -51,22 +51,23 @@ public class Store {
         StringBuilder returnStringBuilder = new StringBuilder();
         returnStringBuilder.append("The items on our menu are:\n");
         stockItems.forEach(item->returnStringBuilder.append(item.getProductType() + "\n"));
-        return returnStringBuilder.toString();
+        return returnStringBuilder.toString().substring(0,returnStringBuilder.length()-1);
     }
 
     @Override
     public String toString() {
         String storeTypes = "";
+        String prefix ="";
         for (StoreTypes.type storeType:storeClassification
              ) {
-            storeTypes+=storeType.toString() + " ";
+            storeTypes+=prefix + storeType.toString();
+            prefix = ",";
         }
 
-        String returnString = "Store{name='" + name + '\'' +
-                ", location=" + location +
-                ", address='" + address + '\'' +
-                ", store types= " + storeTypes +
-                '}';
+        String returnString = "Name='" + name + '\'' +
+                "\nAddress='" + address + '\'' +
+                "\nStore item Types= " + storeTypes +
+                "\n" + this.getMenu();
 
         return returnString;
     }

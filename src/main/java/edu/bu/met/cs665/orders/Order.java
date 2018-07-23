@@ -66,14 +66,17 @@ public class Order {
         //build out our list of order entries
         StringBuilder returnString = new StringBuilder();
         returnString.append("Ordered from: " + this.store.getName()+"\n");
-        returnString.append("Located at:" + this.store.getAddress() +"\n");
+        returnString.append("Located at: " + this.store.getAddress() +"\n");
         returnString.append("Customer Name: " + this.customer.getCustomerName() +"\n");
         returnString.append("Customer Address: " + this.customer.getAddress() +"\n");
 
         returnString.append("");
+
+        String prefix="";
         for (BaseProduct product : orderItems
                 ) {
-            returnString.append(product + "\n");
+            returnString.append(prefix + product);
+            prefix ="\n";
 
         }
         return returnString.toString();
