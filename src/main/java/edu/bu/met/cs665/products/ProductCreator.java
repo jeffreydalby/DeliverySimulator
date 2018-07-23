@@ -2,5 +2,5 @@ package edu.bu.met.cs665.products;
 
 public interface ProductCreator {
 
-    BaseProduct CreateProduct(ProductNames.names name, int quantity);
+    BaseProduct createProduct(ProductNames.Names name, int quantity);
 }

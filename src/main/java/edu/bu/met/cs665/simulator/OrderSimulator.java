@@ -20,11 +20,11 @@ import java.util.Random;
 public class OrderSimulator implements Runnable {
 
     public Thread getOrderSimulatorThread() {
-        return orderSimulatorThread;
+        return this.orderSimulatorThread;
     }
 
     private static OrderSimulator orderSimulatorInstance;
-    private static Thread orderSimulatorThread;
+    private Thread orderSimulatorThread;
     private OrderSimulator(){}
     private int milliSecondsBetweenOrders;
     private int numOrders;
@@ -41,11 +41,11 @@ public class OrderSimulator implements Runnable {
         return orderSimulatorInstance;
     }
 
-    public void StartSimulation(int numOrders, int millisecondsBetweenOrders){
+    void startSimulation(int numOrders, int millisecondsBetweenOrders){
         this.numOrders = numOrders;
         this.milliSecondsBetweenOrders = millisecondsBetweenOrders;
-        orderSimulatorThread = new Thread(OrderSimulator.getInstance());
-        orderSimulatorThread.start();
+        this.orderSimulatorThread = new Thread(OrderSimulator.getInstance());
+        this.orderSimulatorThread.start();
 
     }
 
@@ -84,7 +84,9 @@ public class OrderSimulator implements Runnable {
 
             //randomly decide if it is the persons birthday 20% .
             isBirthday = rnd.nextInt(10) < 2;
-            if(isBirthday) order.addItem(ProductNames.names.giftBox,1);
+            if(isBirthday) {
+                order.addItem(ProductNames.Names.giftBox,1);
+                customer.setBirthDay(true);}
 
             //add a random number of things to the order
             int numOrderItems = (rnd.nextInt(orderItems.size())+1);

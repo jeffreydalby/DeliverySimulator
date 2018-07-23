@@ -6,6 +6,6 @@ public interface Product {
     boolean isKeepWarm();
     int getQuantity();
     void setQuantity(int quantity);
-   // ProductNames.names productName = ProductNames.names.chocolates;
-    ProductNames.names getProductType();
+   // ProductNames.Names productName = ProductNames.Names.chocolates;
+    ProductNames.Names getProductType();
 }

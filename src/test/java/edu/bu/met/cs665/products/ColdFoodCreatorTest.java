@@ -8,8 +8,8 @@ public class ColdFoodCreatorTest {
     @Test
     public void createProduct() {
         ColdFoodCreator coldFoodCreator = new ColdFoodCreator();
-        String productString = (coldFoodCreator.CreateProduct(ProductNames.names.frozenDinner1,2)).toString();
-        Assert.assertEquals("2x " +ProductNames.names.frozenDinner1 + " *Cold Item",productString);
+        String productString = (coldFoodCreator.createProduct(ProductNames.Names.frozenDinner1,2)).toString();
+        Assert.assertEquals("2x " +ProductNames.Names.frozenDinner1 + " *Cold Item",productString);
 
     }
 }

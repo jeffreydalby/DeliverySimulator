@@ -7,10 +7,9 @@ import java.util.List;
 //and the name of the store.
 public class GenericStoreBuilder implements StoreBuilder{
     @Override
-    public Store buildStore(String name, Point location, String streetName, List<StoreTypes.type> typeOfStore) {
+    public Store buildStore(String name, Point location, String streetName, List<StoreTypes.Type> typeOfStore) {
 
-        Store newStore = new Store(name, location,streetName,StoreBuilder.getMenuItems(typeOfStore),typeOfStore) ;
-        return newStore;
+        return new Store(name, location,streetName,StoreBuilder.getMenuItems(typeOfStore),typeOfStore);
     }
 
 

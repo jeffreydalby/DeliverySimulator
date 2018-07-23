@@ -4,13 +4,14 @@ package edu.bu.met.cs665.products;
 //but this time we will create concrete directly
 public class ProductsFactory {
 
-    public static BaseProduct createProduct(ProductNames.names name, int quantity){
+    public static Product createProduct(ProductNames.Names name, int quantity){
         ColdFoodCreator coldFoodCreator = new ColdFoodCreator();
         WarmFoodCreator warmFoodCreator = new WarmFoodCreator();
         StandardProductCreator standardProductCreator = new StandardProductCreator();
 
-        if (name.isKeepCold()) return coldFoodCreator.CreateProduct(name,quantity);
-        else if (name.isKeepWarm()) return warmFoodCreator.CreateProduct(name,quantity);
-        else return standardProductCreator.CreateProduct(name,quantity);
+        if (name.isKeepCold()) return coldFoodCreator.createProduct(name,quantity);
+        else if (name.isKeepWarm()) return warmFoodCreator.createProduct(name,quantity);
+        else if(name.getProductType() == ProductClassification.ProductType.reward) return new BirthDayBox();
+        else return standardProductCreator.createProduct(name,quantity);
     }
 }

@@ -9,8 +9,8 @@ public class WarmFoodCreatorTest {
     public void createProduct() {
         WarmFoodCreator warmFoodCreator = new WarmFoodCreator();
         //makes sure our factory method creates the proper object
-        String productString = (warmFoodCreator.CreateProduct(ProductNames.names.pepperoniPizza,2)).toString();
-        Assert.assertEquals("2x " +ProductNames.names.pepperoniPizza + " *Warm Item",productString);
+        String productString = (warmFoodCreator.createProduct(ProductNames.Names.pepperoniPizza,2)).toString();
+        Assert.assertEquals("2x " +ProductNames.Names.pepperoniPizza + " *Warm Item",productString);
 
     }
 }

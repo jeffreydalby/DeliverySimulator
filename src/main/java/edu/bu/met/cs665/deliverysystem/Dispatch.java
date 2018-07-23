@@ -49,8 +49,8 @@ public class Dispatch implements Subject, Runnable {
     }
 
     @Override
-    public void removeObserver(Observer observer) {
-        driverMap.remove(observer);
+    public void removeObserver(String driverName) {
+        driverMap.remove(driverName);
     }
 
     //The dispatch system is responsible for sending out notifications to the available driver
@@ -67,6 +67,7 @@ public class Dispatch implements Subject, Runnable {
         boolean rushHour;
         //get the order system so we can exit cleanly
         OrderSimulator orderSimulatorInstance = OrderSimulator.getInstance();
+        ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
 
 
         //create a loop to run constantly
@@ -74,8 +75,7 @@ public class Dispatch implements Subject, Runnable {
             //check if we have been interrupted
             if (Thread.currentThread().isInterrupted()) break;
             //check if it is "rush hour" which occurs between ticker time 20 and 80 (won't hit this with less than 20 orders)
-            if (ClockTicker.systemClock > 20 && ClockTicker.systemClock < 80) rushHour = true;
-            else rushHour = false;
+            rushHour = clockTickerInstance.getSystemClock() > 20 && clockTickerInstance.getSystemClock() < 80;
             Display.output("Dispatch Update:"
                     + "\nNumber of orders: " +orders.size()
                     + "\nDrivers Waiting on Assignment: "+ driverMap.values().stream().filter(theDrivers->theDrivers.isAvailable()).count()
@@ -112,7 +112,7 @@ public class Dispatch implements Subject, Runnable {
                     Display.output("Order Queue is Empty!");
                     //if the order system is done creating orders and all drivers are available
                     // and the order queus is empty we can assume we are done
-                    if(!orderSimulatorInstance.isCreatingOrders() && !driverMap.values().stream().anyMatch(theDrivers->!theDrivers.isAvailable())){
+                    if(!orderSimulatorInstance.isCreatingOrders() && driverMap.values().stream().allMatch(theDrivers-> theDrivers.isAvailable())){
                         SetupSystem.stopSimulation();
                         if (Thread.currentThread().isInterrupted()) break;
                     }
@@ -126,9 +126,10 @@ public class Dispatch implements Subject, Runnable {
                 Thread.sleep(2000);
             }
             catch (InterruptedException ex){
+                Display.output("Killed Dispatch Thread");
                 //reset thread so while loop catches it
                 Thread.currentThread().isInterrupted();
-                Display.output("Killed Dispatch Thread");
+                break;
 
             }
         }

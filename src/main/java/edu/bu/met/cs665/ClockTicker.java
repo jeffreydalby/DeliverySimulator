@@ -8,7 +8,7 @@ public class ClockTicker implements Runnable {
         return clockTickerThread;
     }
 
-    private static Thread clockTickerThread;
+    private Thread clockTickerThread;
     private ClockTicker(){}
 
 
@@ -17,16 +17,22 @@ public class ClockTicker implements Runnable {
         return clockTickerInstance;
     }
 
-    public void startClock(){
+    void startClock(){
         this.clockTickerThread = new Thread(ClockTicker.getClockTickerInstance());
         this.clockTickerThread.start();
 
     }
 
-  public static final int CLOCK_SPEED = 1000;
-  //Instead of going off of real time for the simulation (which would take forever)
+  private static final int CLOCK_SPEED = 1000;
+
+    public int getSystemClock() {
+        return this.systemClock;
+    }
+
+    //Instead of going off of real time for the simulation (which would take forever)
   //just using an int ticker system clock;
-  public static int systemClock;
+  private int systemClock;
+
 
 
 
@@ -34,7 +40,7 @@ public class ClockTicker implements Runnable {
   public void run() {
     while (true) {
       if(Thread.currentThread().isInterrupted()) break;
-      systemClock++;
+      this.systemClock++;
 
       try {
         Thread.sleep(CLOCK_SPEED);

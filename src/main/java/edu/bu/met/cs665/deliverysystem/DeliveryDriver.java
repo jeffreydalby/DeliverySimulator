@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
 
-    public static final int BLOCKS_PER_TICK = 300;
+    private static final int BLOCKS_PER_TICK = 300;
     public Point getCurrentLocation() {
         return currentLocation;
     }
@@ -31,7 +31,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         return driverThread;
     }
 
-    public String getDriverName() {
+    String getDriverName() {
         return driverName;
     }
 
@@ -45,7 +45,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
     private int distanceToStore;
     private int distanceStoreToCustomer;
     private int distanceTravelled;
-    boolean pickingUp;
+    private boolean pickingUp;
 
     //create the driver and give him a random starting location
     //set up with a cooler, warmer or both
@@ -56,10 +56,13 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         this.cooler = hasCooler;
         this.available = true;
         this.currentDelivery = null;
+    }
 
+    public void startDriver(){
         //register the driver
         Dispatch dispatch = Dispatch.getInstance();
         dispatch.registerObserver(this.driverName, this);
+
         //start them driving
         driverThread = new Thread(this);
         driverThread.start();
@@ -88,11 +91,12 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                 +"\nAt: " + delivery.getOrder().getStore().getAddress()
                 +"\nFor: " + delivery.getOrder().getCustomer().getCustomerName()
                 +"\nAt: " + delivery.getOrder().getCustomer().getAddress()
-                +"\nEstimated Total distance: "+ (int)(this.distanceToStore + this.distanceStoreToCustomer));
+                +"\nEstimated Total distance: "+ this.distanceToStore + this.distanceStoreToCustomer);
     }
 
     @Override
     public void run() {
+        ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
         //loop to continuously run
         while (true) {
 
@@ -119,7 +123,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                         //we made it to the store to pickup
                         this.currentDelivery.setPickedUp(true);
                         Display.output("Picking up Order #"
-                                + currentDelivery.getOrder().getOrderNumber() + " at time index: " + ClockTicker.systemClock
+                                + currentDelivery.getOrder().getOrderNumber() + " at time index: " + clockTickerInstance.getSystemClock()
                                 + "\nFrom: " + this.currentDelivery.getOrder().getStore().getName()
                                 + "\nDelivering to " + this.currentDelivery.getOrder().getCustomer().getAddress()
                                 + "\nOrder waited for " + this.currentDelivery.getWaitTime() + "time units");
@@ -149,14 +153,15 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
     }
 
     private void deliverOrder() {
+        ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
         //set our location to the customers house cause we are creepy and just hang there until another order comes in
         this.currentLocation = this.currentDelivery.getOrder().getCustomer().getLocation();
         this.currentDelivery.setDelivered(true);
         this.available = true;
-        Display.output("Delivered Order #" + this.currentDelivery.getOrder().getOrderNumber() + "at time index: " + ClockTicker.systemClock
+        Display.output("Delivered Order #" + this.currentDelivery.getOrder().getOrderNumber() + "at time index: " + clockTickerInstance.getSystemClock()
                 +"\nDriver Name: " + this.driverName
                 +"\nRefrigerated: " + this.currentDelivery.getRefergerated()
-                +"\nTotal Distance: " + (int)(this.distanceTravelled)
+                +"\nTotal Distance: " + this.distanceTravelled
                 +"\nCustomer Name: " + this.currentDelivery.getOrder().getCustomer().getCustomerName()
                 +"\nCustomer Address: " + this.currentDelivery.getOrder().getCustomer().getAddress()
                 +"\nTotal time: " + this.currentDelivery.getDeliveredTime()

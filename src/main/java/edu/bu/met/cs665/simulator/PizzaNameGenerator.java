@@ -4,6 +4,9 @@ import java.util.Random;
 
 public class PizzaNameGenerator implements NameGenerator
 {
+    private String [][] pizzaNames={{"Pizza","Pizza"},{"Luigi's","Parlor"},{"Hot Stone", "Oven"},
+            {"Momma's", "Pizzeria"},{"Tony's","Pizza Express"}};
+
     @Override
     public String getName() {
         Random rnd = new Random();

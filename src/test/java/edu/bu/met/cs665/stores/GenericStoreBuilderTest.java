@@ -12,9 +12,9 @@ public class GenericStoreBuilderTest {
     @Test
     public void buildStore() {
         GenericStoreBuilder genericStoreBuilder = new GenericStoreBuilder();
-        List<StoreTypes.type> storeType = new ArrayList<>();
-        storeType.add(StoreTypes.type.pizza);
-        storeType.add(StoreTypes.type.southWestern);
+        List<StoreTypes.Type> storeType = new ArrayList<>();
+        storeType.add(StoreTypes.Type.pizza);
+        storeType.add(StoreTypes.Type.southWestern);
         String name = "Bob's Pizza And Tacos";
         Store testStore = genericStoreBuilder.buildStore(name,new Point(10,234), "234 10th Ave.", storeType);
         System.out.println(testStore);

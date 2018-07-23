@@ -12,7 +12,7 @@ public class BaseProduct implements Product {
     }
 
 
-    public ProductNames.names getProductType() {
+    public ProductNames.Names getProductType() {
         return productType;
     }
 
@@ -26,13 +26,13 @@ public class BaseProduct implements Product {
 
     private boolean keepCold;
     private boolean keepWarm;
-    private ProductNames.names productType;
+    private ProductNames.Names productType;
     private int quantity;
 
     public BaseProduct() {
     }
 
-    public BaseProduct(boolean keepCold, boolean keepWarm, ProductNames.names productType, int quantity) {
+    public BaseProduct(boolean keepCold, boolean keepWarm, ProductNames.Names productType, int quantity) {
         this.keepCold = keepCold;
         this.keepWarm = keepWarm;
         this.productType = productType;

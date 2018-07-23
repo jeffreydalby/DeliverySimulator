@@ -11,9 +11,9 @@ public class NamerTest {
     @Test
     public void getRandomName() {
         StoreNamer namer = new StoreNamer();
-        List<StoreTypes.type> storeItemTypes = new ArrayList<>();
-        storeItemTypes.add(StoreTypes.type.pizza);
-        storeItemTypes.add(StoreTypes.type.southWestern);
+        List<StoreTypes.Type> storeItemTypes = new ArrayList<>();
+        storeItemTypes.add(StoreTypes.Type.pizza);
+        storeItemTypes.add(StoreTypes.Type.southWestern);
         System.out.println(namer.getRandomName(storeItemTypes));
 
     }

@@ -5,18 +5,18 @@ public class BirthDayBox implements Product{
 
     private boolean keepCold;
     private boolean keepWarm;
-    private ProductNames.names productType;
+    private ProductNames.Names productType;
     private int quantity;
-    private BaseProduct boxOfChocolates;
-    private BaseProduct flowerBouquet;
+    private Product boxOfChocolates;
+    private Product flowerBouquet;
 
-    public BirthDayBox(){
-        this.boxOfChocolates =  ProductsFactory.createProduct(ProductNames.names.chocolates,1);
-        this.flowerBouquet = ProductsFactory.createProduct(ProductNames.names.roses,1);
+    BirthDayBox(){
+        this.boxOfChocolates =  ProductsFactory.createProduct(ProductNames.Names.chocolates,1);
+        this.flowerBouquet = ProductsFactory.createProduct(ProductNames.Names.roses,1);
         this.quantity = 1;
         this.keepWarm = false;
         this.keepCold = false;
-        this.productType = ProductNames.names.giftBox;
+        this.productType = ProductNames.Names.giftBox;
     }
 
 
@@ -41,7 +41,14 @@ public class BirthDayBox implements Product{
     }
 
     @Override
-    public ProductNames.names getProductType() {
+    public ProductNames.Names getProductType() {
         return productType;
+    }
+
+    @Override
+    public String toString() {
+        return "1x Gift box containing:\n"
+                +"     " + this.boxOfChocolates.toString() + "\n"
+                + "     " + this.flowerBouquet;
     }
 }

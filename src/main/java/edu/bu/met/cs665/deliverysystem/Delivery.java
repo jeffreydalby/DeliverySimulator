@@ -6,23 +6,23 @@ import edu.bu.met.cs665.orders.Order;
 public class Delivery {
 
 
-
+    private ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
     public boolean isPickedUp() {
         return pickedUp;
     }
 
-    public void setPickedUp(boolean pickedUp) {
+    void setPickedUp(boolean pickedUp) {
         this.pickedUp = pickedUp;
-        this.pickupTime = ClockTicker.systemClock;
+        this.pickupTime = clockTickerInstance.getSystemClock();
     }
 
     public boolean isDelivered() {
         return delivered;
     }
 
-    public void setDelivered(boolean delivered) {
+    void setDelivered(boolean delivered) {
         this.delivered = delivered;
-        this.deliveryTime = ClockTicker.systemClock;
+        this.deliveryTime = clockTickerInstance.getSystemClock();
     }
 
     public DeliveryDriver getDeliveryDriver() {
@@ -33,15 +33,15 @@ public class Delivery {
         this.driver = driver;
     }
 
-    public boolean getRefergerated() {
+    boolean getRefergerated() {
         return refergerated;
     }
 
-    public void setRefergerated(boolean refergerated) {
+    void setRefergerated(boolean refergerated) {
         this.refergerated = refergerated;
     }
 
-    public Order getOrder() {
+    Order getOrder() {
         return order;
     }
 
@@ -54,17 +54,17 @@ public class Delivery {
     private int deliveryTime;
     private boolean refergerated;
 
-    public Delivery(DeliveryDriver driver,Order order){
+    Delivery(DeliveryDriver driver, Order order){
         this.driver = driver;
         this.order = order;
-        this.orderSubmittedTime = ClockTicker.systemClock;
+        this.orderSubmittedTime = clockTickerInstance.getSystemClock();
     }
 
-    public int getWaitTime(){
+    int getWaitTime(){
         return this.pickupTime - this.orderSubmittedTime;
     }
 
-    public int getDeliveredTime(){
+    int getDeliveredTime(){
         return this.deliveryTime - this.orderSubmittedTime;
     }
 

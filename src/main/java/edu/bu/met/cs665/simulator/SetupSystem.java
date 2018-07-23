@@ -35,7 +35,7 @@ public class SetupSystem {
 
     private void startOrderSimulator(int numOrders, int milliSecondsBetweenOrders) {
         OrderSimulator simulatorInstance = OrderSimulator.getInstance();
-        simulatorInstance.StartSimulation(numOrders,milliSecondsBetweenOrders);
+        simulatorInstance.startSimulation(numOrders,milliSecondsBetweenOrders);
     }
 
     public static void stopSimulation(){
@@ -44,14 +44,14 @@ public class SetupSystem {
 
         Display.output("No More work to do, shutting down.");
         Display.output("Sending Drivers Home");
-        for (DeliveryVehicle delivieryDriver:dispatchInstance.getDriverMap().values()
+        for (DeliveryVehicle delivieryDriver:Dispatch.getDriverMap().values()
              ) {delivieryDriver.getDriverThread().interrupt(); }
         Display.output("Stopping dispatcher");
         dispatchInstance.getDispatchThread().interrupt();
         Display.output("Stopping Clock");
         clockTickerInstance.getClockTickerThread().interrupt();
         Display.output("Simulation Complete"
-                + "\nElapsed Time =" + ClockTicker.systemClock
+                + "\nElapsed Time =" + clockTickerInstance.getSystemClock()
                 + "\nShutting Down");
 
     }
@@ -66,15 +66,18 @@ public class SetupSystem {
 
         //we always create one driver with a heater and a cooler to make sure we have that
         deliveryDriver = new DeliveryDriver(peopleNameGenerator.getName(),Address.getRandomGridPoint(),true,true);
+        //start him up
+        deliveryDriver.startDriver();
         //Display.output("Created new driver: " +deliveryDriver );
 
         for (int i = 0; i < numDrivers -1 ; i++) {
             deliveryDriver = new DeliveryDriver(peopleNameGenerator.getName(),Address.getRandomGridPoint(),hasHeater,hasCooler);
-            //get new randoms
+            //start our driver going and register them
+            deliveryDriver.startDriver();
+            //get new randoms for next time around
             hasCooler = rnd.nextInt(10) < 3;
             hasHeater = rnd.nextInt(10) < 3;
             Display.output("Created new driver: \n" + deliveryDriver.toString());
-
         }
     }
 
@@ -93,8 +96,8 @@ public class SetupSystem {
         Random rnd = new Random();
         StoreNamer storeNamer = new StoreNamer();
         GenericStoreBuilder genericStoreBuilder = new GenericStoreBuilder();
-        List<StoreTypes.type> storeType = new ArrayList<>(); //holdre for type fo store to build
-        Point storeLocation = new Point();
+        List<StoreTypes.Type> storeType; //holder for ProductType fo store to build
+        Point storeLocation;
         Store newStore;
 
 
@@ -109,9 +112,9 @@ public class SetupSystem {
 
     }
 
-    private List<StoreTypes.type> getStoreType(boolean hybridStore) {
+    private List<StoreTypes.Type> getStoreType(boolean hybridStore) {
         //get our enums as a list of values
-        List<StoreTypes.type> storeTypes = Arrays.asList(StoreTypes.type.values());
+        List<StoreTypes.Type> storeTypes = Arrays.asList(StoreTypes.Type.values());
         //shuffle the list.
         Collections.shuffle(storeTypes);
         //return first element if not hybrid otherwise return top two elements

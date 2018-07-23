@@ -1,7 +1,7 @@
 package edu.bu.met.cs665.orders;
 
 import edu.bu.met.cs665.customers.Customer;
-import edu.bu.met.cs665.products.BaseProduct;
+import edu.bu.met.cs665.products.Product;
 import edu.bu.met.cs665.products.ProductNames;
 import edu.bu.met.cs665.products.ProductsFactory;
 import edu.bu.met.cs665.stores.Store;
@@ -28,11 +28,11 @@ public class Order {
     public Order(Customer customer, Store store) {
         this.customer = customer;
         this.store = store;
-        currentOrderNumber++;
+        Order.currentOrderNumber++;
         this.orderNumber = currentOrderNumber;
     }
 
-    public List<BaseProduct> getOrderItems() {
+    public List<Product> getOrderItems() {
         return orderItems;
     }
 
@@ -48,13 +48,13 @@ public class Order {
     private boolean needsWarm;
     private static int currentOrderNumber;
     private int orderNumber;
-    private List<BaseProduct> orderItems = new ArrayList<>();
+    private List<Product> orderItems = new ArrayList<>();
     private boolean needsCold;
     private Store store;
 
 
     //create the object from teh factory and add to the orderItems list
-    public void addItem(ProductNames.names itemToAdd, int quantity) {
+    public void addItem(ProductNames.Names itemToAdd, int quantity) {
 
         needsCold = itemToAdd.isKeepCold();
         needsWarm = itemToAdd.isKeepWarm();
@@ -65,17 +65,28 @@ public class Order {
     public String toString() {
         //build out our list of order entries
         StringBuilder returnString = new StringBuilder();
-        returnString.append("Ordered from: " + this.store.getName()+"\n");
-        returnString.append("Located at: " + this.store.getAddress() +"\n");
-        returnString.append("Customer Name: " + this.customer.getCustomerName() +"\n");
-        returnString.append("Customer Address: " + this.customer.getAddress() +"\n");
+        returnString.append("Ordered from: ");
+        returnString.append(this.store.getName());
+        returnString.append("\n");
+        returnString.append("Located at: ");
+        returnString.append(this.store.getAddress());
+        returnString.append("\n");
+        returnString.append("Customer Name: ");
+        returnString.append(this.customer.getCustomerName());
+        returnString.append("\n");
+        returnString.append("Customer Address: ");
+        returnString.append(this.customer.getAddress());
+        returnString.append("\n");
+        returnString.append("Customer's Birthday Today: ");
+        returnString.append(this.customer.isBirthDay());
+        returnString.append("\n");
 
-        returnString.append("");
 
         String prefix="";
-        for (BaseProduct product : orderItems
+        for (Product product : orderItems
                 ) {
-            returnString.append(prefix + product);
+            returnString.append(prefix);
+            returnString.append(product);
             prefix ="\n";
 
         }

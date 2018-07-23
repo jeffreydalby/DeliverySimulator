@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Store {
-    private List<Product> stockItems = new ArrayList<Product>();
+    private List<Product> stockItems = new ArrayList<>();
     private Point location;
     private String address;
 
@@ -29,13 +29,13 @@ public class Store {
     }
 
     private String name;
-    private List<StoreTypes.type> storeClassification;
+    private List<StoreTypes.Type> storeClassification;
 
     public Store(String name){
         this.name = name;
     }
 
-    public Store(String name, Point location, String address, List<Product> stockItems, List<StoreTypes.type> storeClassification){
+    public Store(String name, Point location, String address, List<Product> stockItems, List<StoreTypes.Type> storeClassification){
         this.name = name;
         this.location = location;
         this.address = address;
@@ -47,7 +47,7 @@ public class Store {
         stockItems.add(productToAdd);
     }
 
-    public String getMenu(){
+    String getMenu(){
         StringBuilder returnStringBuilder = new StringBuilder();
         returnStringBuilder.append("The items on our menu are:\n");
         stockItems.forEach(item->returnStringBuilder.append(item.getProductType() + "\n"));
@@ -56,19 +56,18 @@ public class Store {
 
     @Override
     public String toString() {
-        String storeTypes = "";
+        StringBuilder storeTypes = new StringBuilder();
         String prefix ="";
-        for (StoreTypes.type storeType:storeClassification
+        for (StoreTypes.Type storeType:storeClassification
              ) {
-            storeTypes+=prefix + storeType.toString();
+            storeTypes.append(prefix);
+            storeTypes.append(storeType.toString());
             prefix = ",";
         }
 
-        String returnString = "Name='" + name + '\'' +
+        return "Name='" + name + '\'' +
                 "\nAddress='" + address + '\'' +
-                "\nStore item Types= " + storeTypes +
+                "\nStore item Types= " + storeTypes.toString() +
                 "\n" + this.getMenu();
-
-        return returnString;
     }
 }

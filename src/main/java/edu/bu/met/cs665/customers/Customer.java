@@ -25,9 +25,14 @@ public class Customer {
     }
 
     private String customerName; //Name
+
+    public void setBirthDay(boolean birthDay) {
+        this.birthDay = birthDay;
+    }
+
     private boolean birthDay;
 
-    public Customer(String customerName) {
+    Customer(String customerName) {
         this(Address.getRandomGridPoint(),customerName);
 
     }
