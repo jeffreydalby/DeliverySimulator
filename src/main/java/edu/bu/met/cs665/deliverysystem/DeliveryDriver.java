@@ -6,10 +6,14 @@ import edu.bu.met.cs665.geography.Address;
 import edu.bu.met.cs665.geography.Distances;
 
 import java.awt.*;
+//Our driver class, if this was the real world it wouldn't need to be runnable
+//since the runnable section is just simulating what a real driver would do
 
 public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
 
+    //how many city block should the driver be able to move per clock tick
     private static final int BLOCKS_PER_TICK = 300;
+
     public Point getCurrentLocation() {
         return currentLocation;
     }
@@ -35,17 +39,17 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         return driverName;
     }
 
-    private Thread driverThread;
-    private Point currentLocation;
-    private boolean warmer;
-    private boolean cooler;
-    private boolean available;
-    private String driverName;
-    private Delivery currentDelivery;
-    private int distanceToStore;
-    private int distanceStoreToCustomer;
-    private int distanceTravelled;
-    private boolean pickingUp;
+    private Thread driverThread;  //thread for individual driver so we can shut it down later
+    private Point currentLocation; //location of driver
+    private boolean warmer; //does the vehicle have a heating compartment/bag to keep food warm
+    private boolean cooler; //does the vehicle have a refrigerator to keep food cold
+    private boolean available; //are they available for a pickup
+    private String driverName; //drivers name
+    private Delivery currentDelivery; //what they are delivering
+    private int distanceToStore; //how far are they from the store to pick the order up
+    private int distanceStoreToCustomer; //how far is the store to the customer
+    private int distanceTravelled; //how far have the travelled on this particular trip
+    private boolean pickingUp; //are the in the process of picking up from the store
 
     //create the driver and give him a random starting location
     //set up with a cooler, warmer or both
@@ -58,7 +62,10 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         this.currentDelivery = null;
     }
 
-    public void startDriver(){
+    /**
+     * Start up the drivers thread
+     */
+    public void startDriver() {
         //register the driver
         Dispatch dispatch = Dispatch.getInstance();
         dispatch.registerObserver(this.driverName, this);
@@ -84,16 +91,19 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         this.pickingUp = true;
 
         Display.output("Order Accepted"
-                +"\nDriver: " + this.driverName
-                +"\nPicking up Order #" +delivery.getOrder().getOrderNumber()
-                +"\nRefrigerated due to traffic: " + this.currentDelivery.getRefergerated()
-                +"\nFrom: " + delivery.getOrder().getStore().getName()
-                +"\nAt: " + delivery.getOrder().getStore().getAddress()
-                +"\nFor: " + delivery.getOrder().getCustomer().getCustomerName()
-                +"\nAt: " + delivery.getOrder().getCustomer().getAddress()
-                +"\nEstimated Total distance: "+ this.distanceToStore + this.distanceStoreToCustomer);
+                + "\nDriver: " + this.driverName
+                + "\nPicking up Order #" + delivery.getOrder().getOrderNumber()
+                + "\nRefrigerated due to traffic: " + this.currentDelivery.getRefergerated()
+                + "\nFrom: " + delivery.getOrder().getStore().getName()
+                + "\nAt: " + delivery.getOrder().getStore().getAddress()
+                + "\nFor: " + delivery.getOrder().getCustomer().getCustomerName()
+                + "\nAt: " + delivery.getOrder().getCustomer().getAddress()
+                + "\nEstimated Total distance: " + this.distanceToStore + this.distanceStoreToCustomer);
     }
 
+    /**
+     * Simulate a real drivers behavior
+     */
     @Override
     public void run() {
         ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
@@ -142,16 +152,14 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                     }
 
                 }
-
             }
             Display.output("Driver Status: \n" + this.toString());
-
-
         }
-
-
     }
 
+    /**
+     * Make the order as delivered, report it and reset for the next delivery
+     */
     private void deliverOrder() {
         ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
         //set our location to the customers house cause we are creepy and just hang there until another order comes in
@@ -159,14 +167,14 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         this.currentDelivery.setDelivered(true);
         this.available = true;
         Display.output("Delivered Order #" + this.currentDelivery.getOrder().getOrderNumber() + "at time index: " + clockTickerInstance.getSystemClock()
-                +"\nDriver Name: " + this.driverName
-                +"\nRefrigerated: " + this.currentDelivery.getRefergerated()
-                +"\nTotal Distance: " + this.distanceTravelled
-                +"\nCustomer Name: " + this.currentDelivery.getOrder().getCustomer().getCustomerName()
-                +"\nCustomer Address: " + this.currentDelivery.getOrder().getCustomer().getAddress()
-                +"\nTotal time: " + this.currentDelivery.getDeliveredTime()
-                +"\nFrom: " + this.currentDelivery.getOrder().getStore().getName()
-                +"\nOrder Contents: " + this.currentDelivery.getOrder().getOrderItems());
+                + "\nDriver Name: " + this.driverName
+                + "\nRefrigerated: " + this.currentDelivery.getRefergerated()
+                + "\nTotal Distance: " + this.distanceTravelled
+                + "\nCustomer Name: " + this.currentDelivery.getOrder().getCustomer().getCustomerName()
+                + "\nCustomer Address: " + this.currentDelivery.getOrder().getCustomer().getAddress()
+                + "\nTotal time: " + this.currentDelivery.getDeliveredTime()
+                + "\nFrom: " + this.currentDelivery.getOrder().getStore().getName()
+                + "\nOrder Contents: " + this.currentDelivery.getOrder().getOrderItems());
         this.currentDelivery = null;
         //set to -1 to indicate not in use
         this.distanceStoreToCustomer = -1;
@@ -187,7 +195,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                 "Is available: " + this.available);
         if (this.distanceStoreToCustomer > 0)
             returnString += "\nCurrent distance to Customer: " + (this.distanceStoreToCustomer + this.distanceToStore);
-        if(this.distanceToStore > 0)
+        if (this.distanceToStore > 0)
             returnString += "\nDistance to store for pickup: " + this.distanceToStore;
         return returnString;
     }

@@ -4,6 +4,7 @@ import edu.bu.met.cs665.geography.Address;
 
 import java.awt.*;
 
+//class to hold our various customer objects
 public class Customer {
     public String getAddress() {
         return address;
@@ -33,11 +34,17 @@ public class Customer {
     private boolean birthDay;
 
     Customer(String customerName) {
-        this(Address.getRandomGridPoint(),customerName);
+        this(Address.getRandomGridPoint(), customerName);
 
     }
 
-    public Customer(Point location, String customerName){
+    /**
+     * Customer constructor
+     *
+     * @param location     - point on the grid to create the customers house
+     * @param customerName - name of customer
+     */
+    public Customer(Point location, String customerName) {
         this.location = location;
         this.address = Address.getAddress(location);
         this.customerName = customerName;

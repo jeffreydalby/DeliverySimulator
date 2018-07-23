@@ -3,10 +3,12 @@ package edu.bu.met.cs665.deliverysystem;
 import edu.bu.met.cs665.ClockTicker;
 import edu.bu.met.cs665.orders.Order;
 
+//Delivery object consists of an order and driver and things to track if/when it is delievered
 public class Delivery {
 
-
+    //we need to grab the clock so we can update tickerstamps
     private ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
+
     public boolean isPickedUp() {
         return pickedUp;
     }
@@ -16,6 +18,7 @@ public class Delivery {
         this.pickupTime = clockTickerInstance.getSystemClock();
     }
 
+    //for future expansion, we could put these in a database and then be abel to search on which were delivered
     public boolean isDelivered() {
         return delivered;
     }
@@ -54,20 +57,29 @@ public class Delivery {
     private int deliveryTime;
     private boolean refergerated;
 
-    Delivery(DeliveryDriver driver, Order order){
+    Delivery(DeliveryDriver driver, Order order) {
         this.driver = driver;
         this.order = order;
         this.orderSubmittedTime = clockTickerInstance.getSystemClock();
     }
 
-    int getWaitTime(){
+    /**
+     * Tells us how long an order sat at the store before being picked up
+     *
+     * @return- amount of time waited at the store
+     */
+    int getWaitTime() {
         return this.pickupTime - this.orderSubmittedTime;
     }
 
-    int getDeliveredTime(){
+    /**
+     * tells us how long a deliverey waited in total before being dleivered
+     *
+     * @return- amount of time it took to get to customers house
+     */
+    int getDeliveredTime() {
         return this.deliveryTime - this.orderSubmittedTime;
     }
-
 
 
 }

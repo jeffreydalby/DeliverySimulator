@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Singleton Pattern because we only want one instance of our Customer list
+//Place to hold all of our potential customers since we aren't using a database
 public class SystemCustomers {
 
     private static SystemCustomers customersInstance;
@@ -14,14 +15,16 @@ public class SystemCustomers {
 
     private List<Customer> customers = new ArrayList<>();
 
-    private SystemCustomers() {}
+    private SystemCustomers() {
+    }
 
-    public void addCustomer(Customer customer){
+    public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
-    public static synchronized SystemCustomers getInstance(){
-        if (customersInstance == null){
+    //synced incase any of th threads try to manipulate the customer list at the same time
+    public static synchronized SystemCustomers getInstance() {
+        if (customersInstance == null) {
             customersInstance = new SystemCustomers();
         }
         return customersInstance;
@@ -30,8 +33,8 @@ public class SystemCustomers {
     @Override
     public String toString() {
         StringBuilder returnString = new StringBuilder();
-        for (Customer customer:customers
-             ) {
+        for (Customer customer : customers
+                ) {
             returnString.append(customer.toString() + "\n");
         }
         return returnString.toString();

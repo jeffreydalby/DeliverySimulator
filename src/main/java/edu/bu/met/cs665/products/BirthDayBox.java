@@ -41,7 +41,7 @@ public class BirthDayBox implements Product{
     }
 
     @Override
-    public ProductNames.Names getProductType() {
+    public ProductNames.Names getProductName() {
         return productType;
     }
 

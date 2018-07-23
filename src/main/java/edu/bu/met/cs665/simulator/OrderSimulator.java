@@ -92,7 +92,7 @@ public class OrderSimulator implements Runnable {
             int numOrderItems = (rnd.nextInt(orderItems.size())+1);
             for (int j = 0; j < numOrderItems; j++) {
                 //allow a random amount up to 5.
-                order.addItem(orderItems.get(j).getProductType(),(rnd.nextInt(5)+1));
+                order.addItem(orderItems.get(j).getProductName(),(rnd.nextInt(5)+1));
             }
 
             systemDispatcher.placeOrder(order);

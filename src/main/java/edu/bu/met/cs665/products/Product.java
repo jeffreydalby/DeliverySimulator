@@ -7,5 +7,5 @@ public interface Product {
     int getQuantity();
     void setQuantity(int quantity);
    // ProductNames.Names productName = ProductNames.Names.chocolates;
-    ProductNames.Names getProductType();
+    ProductNames.Names getProductName();
 }

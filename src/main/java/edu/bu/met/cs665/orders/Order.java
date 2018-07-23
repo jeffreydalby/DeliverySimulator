@@ -9,6 +9,7 @@ import edu.bu.met.cs665.stores.Store;
 import java.util.ArrayList;
 import java.util.List;
 
+//orders made by customers
 public class Order {
 
     public boolean isNeedsCold() {
@@ -44,16 +45,20 @@ public class Order {
         return store;
     }
 
-    private Customer customer;
-    private boolean needsWarm;
-    private static int currentOrderNumber;
-    private int orderNumber;
-    private List<Product> orderItems = new ArrayList<>();
-    private boolean needsCold;
-    private Store store;
+    private Customer customer; //customer that placed the order
+    private boolean needsWarm; //does it need to be kept warm
+    private static int currentOrderNumber; //order number counter spread across all orders
+    private int orderNumber; //this orders order number
+    private List<Product> orderItems = new ArrayList<>(); //items ordered
+    private boolean needsCold; //does it need to be kept cold
+    private Store store; //store that has the order items.
 
-
-    //create the object from teh factory and add to the orderItems list
+    /**
+     * create the object from the factory and add to the orderItems list
+     *
+     * @param itemToAdd - what items is being orderd
+     * @param quantity  - how many of the item
+     */
     public void addItem(ProductNames.Names itemToAdd, int quantity) {
 
         needsCold = itemToAdd.isKeepCold();
@@ -82,12 +87,12 @@ public class Order {
         returnString.append("\n");
 
 
-        String prefix="";
+        String prefix = "";
         for (Product product : orderItems
                 ) {
             returnString.append(prefix);
             returnString.append(product);
-            prefix ="\n";
+            prefix = "\n";
 
         }
         return returnString.toString();

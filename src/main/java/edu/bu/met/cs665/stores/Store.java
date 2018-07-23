@@ -50,7 +50,7 @@ public class Store {
     String getMenu(){
         StringBuilder returnStringBuilder = new StringBuilder();
         returnStringBuilder.append("The items on our menu are:\n");
-        stockItems.forEach(item->returnStringBuilder.append(item.getProductType() + "\n"));
+        stockItems.forEach(item->returnStringBuilder.append(item.getProductName() + "\n"));
         return returnStringBuilder.toString().substring(0,returnStringBuilder.length()-1);
     }
 
