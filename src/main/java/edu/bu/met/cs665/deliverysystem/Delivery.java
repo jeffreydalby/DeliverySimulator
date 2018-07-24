@@ -6,7 +6,7 @@ import edu.bu.met.cs665.orders.Order;
 //Delivery object consists of an order and driver and things to track if/when it is delievered
 public class Delivery {
 
-    //we need to grab the clock so we can update tickerstamps
+    //we need to grab the clock so we can updateDelivery tickerstamps
     private ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
 
     public boolean isPickedUp() {

@@ -35,8 +35,11 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         return driverThread;
     }
 
-    String getDriverName() {
+    public String getDriverName() {
         return driverName;
+    }
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
     }
 
     private Thread driverThread;  //thread for individual driver so we can shut it down later
@@ -44,6 +47,9 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
     private boolean warmer; //does the vehicle have a heating compartment/bag to keep food warm
     private boolean cooler; //does the vehicle have a refrigerator to keep food cold
     private boolean available; //are they available for a pickup
+
+
+
     private String driverName; //drivers name
     private Delivery currentDelivery; //what they are delivering
     private int distanceToStore; //how far are they from the store to pick the order up
@@ -81,7 +87,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
      * @param delivery - the delivery to be made;
      */
     @Override
-    public void update(Delivery delivery) {
+    public void updateDelivery(Delivery delivery) {
 
 
         this.available = false;
@@ -98,7 +104,12 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                 + "\nAt: " + delivery.getOrder().getStore().getAddress()
                 + "\nFor: " + delivery.getOrder().getCustomer().getCustomerName()
                 + "\nAt: " + delivery.getOrder().getCustomer().getAddress()
-                + "\nEstimated Total distance: " + this.distanceToStore + this.distanceStoreToCustomer);
+                + "\nEstimated Total distance: " + (this.distanceToStore + this.distanceStoreToCustomer));
+    }
+
+    @Override
+    public void updateStatus() {
+        Display.output("Driver Status: \n" + this.toString());
     }
 
     /**
@@ -116,7 +127,11 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
-                Display.output("Driver: " + this.driverName + " went to sleep");
+                Dispatch dispatch = Dispatch.getInstance();
+                //deregister the driver
+                dispatch.removeObserver(this.driverName);
+                Display.output("Driver: " + this.driverName + " signed out of the system");
+
             }
 
             //allow us to cleanly exit the thread.
@@ -153,7 +168,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
 
                 }
             }
-            Display.output("Driver Status: \n" + this.toString());
+
         }
     }
 
@@ -166,7 +181,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         this.currentLocation = this.currentDelivery.getOrder().getCustomer().getLocation();
         this.currentDelivery.setDelivered(true);
         this.available = true;
-        Display.output("Delivered Order #" + this.currentDelivery.getOrder().getOrderNumber() + "at time index: " + clockTickerInstance.getSystemClock()
+        Display.output("Delivered Order #" + this.currentDelivery.getOrder().getOrderNumber() + " at time index: " + clockTickerInstance.getSystemClock()
                 + "\nDriver Name: " + this.driverName
                 + "\nRefrigerated: " + this.currentDelivery.getRefergerated()
                 + "\nTotal Distance: " + this.distanceTravelled

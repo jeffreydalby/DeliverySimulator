@@ -7,4 +7,6 @@ public interface Subject {
     void removeObserver(String driverName);
 
     void notifyObserver(DeliveryDriver deliveryDriver, Delivery delivery);
+
+    void notifyAllObservers();
 }

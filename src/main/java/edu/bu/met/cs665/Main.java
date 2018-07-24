@@ -8,7 +8,7 @@ public class Main{
   public static final int NUMBER_OF_STORES = 15;
   public static final int NUMBER_OF_DRIVERS = 12;
   public static final int NUMBER_OF_CUSTOMERS = 30;
-  public static final int NUMBER_OF_ORDERS = 200;
+  public static final int NUMBER_OF_ORDERS = 1;
   public static final int MILLISECONDS_BETWEEN_ORDERS = 1000;
 
 

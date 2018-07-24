@@ -8,5 +8,7 @@ public interface DeliveryVehicle {
     boolean hasWarmer();
     boolean hasCooler();
     boolean isAvailable();
+    void setDriverName(String driverName);
+    String getDriverName();
     Thread getDriverThread();
 }

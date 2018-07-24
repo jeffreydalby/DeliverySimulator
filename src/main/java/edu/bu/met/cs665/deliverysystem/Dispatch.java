@@ -52,6 +52,14 @@ public class Dispatch implements Subject, Runnable {
      */
     @Override
     public void registerObserver(String identity, DeliveryVehicle vehicle) {
+        //if our driver map already has a driver with this name make it unique by adding
+        //the current length of the map to it otherwise we'll loose track of a thread
+        if(driverMap.containsKey(identity))
+        {
+            identity += " #" +driverMap.size();
+            vehicle.setDriverName(identity);
+        }
+
         driverMap.put(identity, vehicle);
 
     }
@@ -70,7 +78,16 @@ public class Dispatch implements Subject, Runnable {
     // and doesn't have a need to multicast
     @Override
     public void notifyObserver(DeliveryDriver deliveryDriver, Delivery delivery) {
-        deliveryDriver.update(delivery);
+        deliveryDriver.updateDelivery(delivery);
+    }
+
+    /**
+     * Requested all drivers post an update to where they are
+     */
+    @Override
+    public void notifyAllObservers() {
+        //go through each registered driver and ask for an update
+        driverMap.values().forEach(theDriver->((Observer)theDriver).updateStatus());
     }
 
     //main automated dispatch system
@@ -129,6 +146,8 @@ public class Dispatch implements Subject, Runnable {
                 }
 
             }
+            //get an update from all of our drivers
+            this.notifyAllObservers();
 
             try {
                 Thread.sleep(2000);
@@ -139,9 +158,8 @@ public class Dispatch implements Subject, Runnable {
                 break;
 
             }
+
         }
-
-
     }
 
     /**
