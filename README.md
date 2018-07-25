@@ -1,18 +1,18 @@
 # Store Delivery System Simulator
 
-#Implementation 
+# Implementation 
 This multi-threaded complete simulator is a complex simulation that is highly scalable, with the ability to automatically generate all the objects needed at run time.
 
-##General Design
-###Stores
+## General Design
+### Stores
 Names of Stores are randomly generated based on the types of items they stock. Store names are generated using the "Strategy" Design pattern. 
 
 A store can be any combination of two subtypes. They are created using the Factory Method pattern, and have a list of products they stock, which is also created using Factory Method.
 
-###Users
+### Users
 Users of the system are generatated at run time with names generated randomly using the Strategy pattern, addresses are randomly assigned on a 1000 x 1000 block grid. 
 
-###Delivery Drivers
+### Delivery Drivers
 Delivery Drivers are created at run time in their own thread and implement the observer side of the Observer pattern.  They run at default speed of 1 tick per seconds, with a travel distance of 300 blocks per tick (changable via a constant on the delivery driver object). The following attributes for their vehicle are set at the time of creation:
 
 - Location - where on the city grid are they currently located
@@ -23,20 +23,20 @@ Delivery Drivers are created at run time in their own thread and implement the o
 They also have the ability to store a "delivery item".  Each "tick" of their clock allows them to check if they have been assigned a new delivery, if so to first head to the appropriate store to pick up the item, and then head to the customer. For the sake of simplicty distances are rounded to city blocks.
 
 
-###Orders
+### Orders
 
 Orders are created by the Simulator from random stores, with random items being delivered to random customers.
 
-###Dispatch
+### Dispatch
 
 Dispatch acts as the main system- monitoring for incoming orders, finding the nearest driver with the equipment requirements to handle the order(needs to be kept cold or hot), and then creating a "Delivery" object and notifying the appropriate driver using tthe Observer pattern (drivers register with Dispatch when they start running).
 
 In order to meet a system requirement the dispatch system kicks off a "Rush Hour" even based on the simulator's system timer. Dispatch also using the Observer pattern to request updates from all registered drivers as to their current status.
  
-###Simulator
+### Simulator
 The Simulator is responsible for kicking off the creation of all of our objects, and starting the appropriate threads.
 
-####Order Simulator Sub-system
+#### Order Simulator Sub-system
 A sub-system of of the simulator is the order generation system.  This has the ability to create as many orders as specified and will submit them spread with a specified time between orders.
 
 # Flexibility vs Complexity
@@ -48,18 +48,18 @@ Add a new store type is slightly more complex, since a new name generator would 
 
 All of this automation comes at the cost of a fairly complex system design, though code duplication has been avoided as much as possible (nearly entirely) by utilizing various design patterns (factories, strategy pattern, etc.) The design also makes use of a few singleton objects, primarily due to a desire to practice this technique.
 
-#Design patterns:
-##Observer Pattern
+# Design patterns:
+## Observer Pattern
 The dispatch system makes use of the Observer Pattern, with each delivery driver registering with the Dispatch object.  Dispatch then calls update methods on the driver to either notify them of a new delivery assigned to them, or to request a printout of a status update.
-##Factory method pattern
+## Factory method pattern
 Because the number of objects (drivers, stores, orders) can be set prior to running the simulation, it needed to be able to scale to potentially hundred or thousands of items.  The only practical  way to create each object was to use the Factory method pattern.
-##Strategy Pattern
+## Strategy Pattern
 The behavior of the name generator only changes in as much as the type of names it needs to create, whether it is a person's name or a store's name. By using he Strategy pattern we can simply call the right naming behavior based on the type of object it is naming.
-#Singleton Pattern
+## Singleton Pattern
 This pattern is used for the Dispatch object, Primary Simulator Object, Order Simulator, and Simulator Clock Ticker. We only need one of each object, and need to ensure that we grab the right information from them.  That being said, given the current "distaste" for singletons in the programming world, none of these had to be created this way and were done so as a way to practice this technique.
 
 
-#Requirements as given
+# Requirements as given
 A consortium of shops in a large city has established an agreement with local independent van and
 taxi drivers to deliver products from the stores to the customer destinations. When a store gets a
 product delivery order, it creates a request which is broadcast to relevant drivers within a certain
