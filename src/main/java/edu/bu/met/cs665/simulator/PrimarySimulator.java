@@ -1,6 +1,5 @@
 package edu.bu.met.cs665.simulator;
 
-import edu.bu.met.cs665.ClockTicker;
 import edu.bu.met.cs665.Display.Display;
 import edu.bu.met.cs665.customers.Customer;
 import edu.bu.met.cs665.customers.SystemCustomers;
@@ -8,6 +7,9 @@ import edu.bu.met.cs665.deliverysystem.DeliveryDriver;
 import edu.bu.met.cs665.deliverysystem.DeliveryVehicle;
 import edu.bu.met.cs665.deliverysystem.Dispatch;
 import edu.bu.met.cs665.geography.Address;
+import edu.bu.met.cs665.simulator.clockticker.ClockTicker;
+import edu.bu.met.cs665.simulator.namingsystem.PeopleNameGenerator;
+import edu.bu.met.cs665.simulator.namingsystem.StoreNamer;
 import edu.bu.met.cs665.stores.GenericStoreBuilder;
 import edu.bu.met.cs665.stores.Store;
 import edu.bu.met.cs665.stores.StoreTypes;
@@ -17,9 +19,14 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class SetupSystem {
+public class PrimarySimulator {
 
     public void createSimulation(int numStores, int numDrivers, int numCustomers, int numOrders, int milliSecondsBetweenOrders) {
+        //we use our own clock so we can do things like create "rush hour events" regardless of system time
+        //create and start the clock
+        Display.output("Starting Clock");
+        ClockTicker mainClock = ClockTicker.getClockTickerInstance();
+        mainClock.startClock();
 
         //first create the stores
         createSimulationStores(numStores);

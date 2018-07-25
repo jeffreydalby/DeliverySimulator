@@ -7,11 +7,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//Store objects for the system
 public class Store {
-    private List<Product> stockItems = new ArrayList<>();
-    private Point location;
-    private String address;
 
+
+    //public getters
     public List<Product> getStockItems() {
         return stockItems;
     }
@@ -28,13 +28,26 @@ public class Store {
         return name;
     }
 
-    private String name;
-    private List<StoreTypes.Type> storeClassification;
-
     public Store(String name){
         this.name = name;
     }
 
+    private List<Product> stockItems = new ArrayList<>(); //items the store carries
+    private Point location; //grid point of the store
+    private String address; //Store's address (based on grid point)
+    private String name; //name of the store
+    private List<StoreTypes.Type> storeClassification; //type of item(s) store carries
+
+    //TODO Another constructor with too many parameters it seems...consider builder.
+
+    /**
+     * Store constructor
+     * @param name -name of the store
+     * @param location -grid point of the store
+     * @param address -Store's address (based on grid point)
+     * @param stockItems -items the store carries
+     * @param storeClassification -type of item(s) store carries
+     */
     public Store(String name, Point location, String address, List<Product> stockItems, List<StoreTypes.Type> storeClassification){
         this.name = name;
         this.location = location;
@@ -43,13 +56,23 @@ public class Store {
         this.storeClassification = storeClassification;
     }
 
+    /**
+     * Add item to stock
+     * @param productToAdd - Product to add to inventory
+     */
     public void addStockItem(BaseProduct productToAdd){
         stockItems.add(productToAdd);
     }
 
+    /**
+     * Builds out a menu/inventory list
+     * @return - String containing the list of items the store carries
+     */
+
     String getMenu(){
         StringBuilder returnStringBuilder = new StringBuilder();
         returnStringBuilder.append("The items on our menu are:\n");
+        //we are okay with the string concatination inside the lambda because it is easier to read.
         stockItems.forEach(item->returnStringBuilder.append(item.getProductName() + "\n"));
         return returnStringBuilder.toString().substring(0,returnStringBuilder.length()-1);
     }

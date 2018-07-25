@@ -1,11 +1,11 @@
 package edu.bu.met.cs665.deliverysystem;
 
-import edu.bu.met.cs665.ClockTicker;
+import edu.bu.met.cs665.simulator.clockticker.ClockTicker;
 import edu.bu.met.cs665.Display.Display;
 import edu.bu.met.cs665.geography.Distances;
 import edu.bu.met.cs665.orders.Order;
 import edu.bu.met.cs665.simulator.OrderSimulator;
-import edu.bu.met.cs665.simulator.SetupSystem;
+import edu.bu.met.cs665.simulator.PrimarySimulator;
 
 import java.awt.*;
 import java.util.*;
@@ -109,12 +109,12 @@ public class Dispatch implements Subject, Runnable {
             rushHour = clockTickerInstance.getSystemClock() > 20 && clockTickerInstance.getSystemClock() < 80;
             Display.output("Dispatch Update:"
                     + "\nNumber of orders: " + orders.size()
-                    + "\nDrivers Waiting on Assignment: " + driverMap.values().stream().filter(theDrivers -> theDrivers.isAvailable()).count()
+                    + "\nDrivers Waiting on Assignment: " + driverMap.values().stream().filter(DeliveryVehicle::isAvailable).count()
                     + "\nCurrently Rush hour: " + rushHour);
 
 
             //check for order in the queue and at least one available driver
-            if (!orders.isEmpty() && driverMap.values().stream().anyMatch(thisDriver -> thisDriver.isAvailable())) {
+            if (!orders.isEmpty() && driverMap.values().stream().anyMatch(DeliveryVehicle::isAvailable)) {
                 nextOrder = orders.removeFirst();
 
 
@@ -140,8 +140,8 @@ public class Dispatch implements Subject, Runnable {
                 Display.output("Order Queue is Empty!");
                 //if the order system is done creating orders and all drivers are available
                 // and the order queus is empty we can assume we are done
-                if (!orderSimulatorInstance.isCreatingOrders() && driverMap.values().stream().allMatch(theDrivers -> theDrivers.isAvailable())) {
-                    SetupSystem.stopSimulation();
+                if (!orderSimulatorInstance.isCreatingOrders() && driverMap.values().stream().allMatch(DeliveryVehicle::isAvailable)) {
+                    PrimarySimulator.stopSimulation();
                     if (Thread.currentThread().isInterrupted()) break;
                 }
 
@@ -155,7 +155,7 @@ public class Dispatch implements Subject, Runnable {
                 Display.output("Killed Dispatch Thread");
                 //reset thread so while loop catches it
                 Thread.currentThread().isInterrupted();
-                break;
+
 
             }
 

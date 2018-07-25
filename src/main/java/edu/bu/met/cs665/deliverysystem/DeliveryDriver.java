@@ -1,6 +1,6 @@
 package edu.bu.met.cs665.deliverysystem;
 
-import edu.bu.met.cs665.ClockTicker;
+import edu.bu.met.cs665.simulator.clockticker.ClockTicker;
 import edu.bu.met.cs665.Display.Display;
 import edu.bu.met.cs665.geography.Address;
 import edu.bu.met.cs665.geography.Distances;
@@ -208,10 +208,16 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
                 + "Has cooler: " + this.hasCooler()
                 + "\n" + "Has warmer: " + this.hasWarmer() + "\n" +
                 "Is available: " + this.available);
+        if(this.distanceTravelled > 0)
+            returnString +="\nDistance travelled: " + this.distanceTravelled + " blocks";
         if (this.distanceStoreToCustomer > 0)
-            returnString += "\nCurrent distance to Customer: " + (this.distanceStoreToCustomer + this.distanceToStore);
+            returnString += "\nCurrent distance to Customer: " + (this.distanceStoreToCustomer + this.distanceToStore) + " blocks.";
         if (this.distanceToStore > 0)
-            returnString += "\nDistance to store for pickup: " + this.distanceToStore;
+            returnString += "\nDistance to store for pickup: " + this.distanceToStore + " blocks.";
+        if(this.currentDelivery != null)
+            returnString += "\nCurrently delivering Order #" + this.currentDelivery.getOrder().getOrderNumber()
+                    +" \n" + this.currentDelivery.getOrder().toString();
+
         return returnString;
     }
 }

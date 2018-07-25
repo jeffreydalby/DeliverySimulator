@@ -1,6 +1,6 @@
 package edu.bu.met.cs665.deliverysystem;
 
-import edu.bu.met.cs665.ClockTicker;
+import edu.bu.met.cs665.simulator.clockticker.ClockTicker;
 import edu.bu.met.cs665.orders.Order;
 
 //Delivery object consists of an order and driver and things to track if/when it is delievered
@@ -66,7 +66,7 @@ public class Delivery {
     /**
      * Tells us how long an order sat at the store before being picked up
      *
-     * @return- amount of time waited at the store
+     * @return - amount of time waited at the store
      */
     int getWaitTime() {
         return this.pickupTime - this.orderSubmittedTime;
@@ -75,7 +75,7 @@ public class Delivery {
     /**
      * tells us how long a deliverey waited in total before being dleivered
      *
-     * @return- amount of time it took to get to customers house
+     * @return - amount of time it took to get to customers house
      */
     int getDeliveredTime() {
         return this.deliveryTime - this.orderSubmittedTime;

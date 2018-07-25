@@ -1,10 +1,17 @@
-package edu.bu.met.cs665.simulator;
+package edu.bu.met.cs665.simulator.namingsystem;
 
 import java.util.Random;
 
+//Behavior for creating Dessert Shop names
 public class DessertsNameGenerator implements NameGenerator {
-    private String[][] dessertsNames= {{"The Ice Cream", "Shop"},{"Ma's Candy", "Store"},{"Frank's Sugar", "Parlor"}};
+    //Potential names, add pairings here to increase the possibilities
+    private String[][] dessertsNames = {{"The Ice Cream", "Shop"}, {"Ma's Candy", "Store"}, {"Frank's Sugar", "Parlor"}};
 
+    /**
+     * Get the store name
+     *
+     * @return - store name
+     */
     @Override
     public String getName() {
         Random rnd = new Random();

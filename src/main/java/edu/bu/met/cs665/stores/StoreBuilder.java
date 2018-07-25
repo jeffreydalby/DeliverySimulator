@@ -20,8 +20,8 @@ public interface StoreBuilder {
 
         //build a list of types of items the store carries based on store classification
         List<ProductClassification.ProductType> typesOfMenuItems = new ArrayList<>();
-        for (StoreTypes.Type typeOfStore: storeType
-             ) {
+        for (StoreTypes.Type typeOfStore : storeType
+                ) {
             typesOfMenuItems.add(ProductClassification.ProductType.valueOf(typeOfStore.toString()));
         }
         //create the menu by filtering out just the types of items for this store
@@ -33,7 +33,7 @@ public interface StoreBuilder {
                     .forEach(name -> menuList.add(ProductsFactory.createProduct(name, 0)));
         }
         //As part of the delivery program all stores have a gift box option for birthdays.
-        menuList.add(ProductsFactory.createProduct(ProductNames.Names.giftBox,1));
+        menuList.add(ProductsFactory.createProduct(ProductNames.Names.giftBox, 1));
 
         return menuList;
     }

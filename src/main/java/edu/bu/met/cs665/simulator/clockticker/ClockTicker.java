@@ -1,29 +1,43 @@
-package edu.bu.met.cs665;
+package edu.bu.met.cs665.simulator.clockticker;
 
+//Clock Ticker so we can control timestamps for the simulation
 public class ClockTicker implements Runnable {
 
-    private static ClockTicker clockTickerInstance;
+    private static ClockTicker clockTickerInstance; //singleton instance
+    private Thread clockTickerThread; //Thread pointer so we can shut it down gracefully
 
-    public Thread getClockTickerThread() {
-        return clockTickerThread;
-    }
+    //Use the to speed up or slow down the simulated clock
+    private static final int CLOCK_SPEED = 1000;
 
-    private Thread clockTickerThread;
-    private ClockTicker(){}
+    private ClockTicker(){} //prevent instantiation
 
-
+    /**
+     * Get the singleton instance of the clockticker
+     * @return singleton instance
+     */
     public static synchronized ClockTicker getClockTickerInstance(){
         if(clockTickerInstance == null) clockTickerInstance = new ClockTicker();
         return clockTickerInstance;
     }
 
-    void startClock(){
+    /**
+     * Get the thread holding the ticker
+     * @return thread with ticker
+     */
+    public Thread getClockTickerThread() {
+        return clockTickerThread;
+    }
+
+    /**
+     * Start the clock in it's own thread
+     */
+    public void startClock(){
         this.clockTickerThread = new Thread(ClockTicker.getClockTickerInstance());
         this.clockTickerThread.start();
 
     }
 
-  private static final int CLOCK_SPEED = 1000;
+
 
     public int getSystemClock() {
         return this.systemClock;

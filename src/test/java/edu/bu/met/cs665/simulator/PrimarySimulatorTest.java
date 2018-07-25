@@ -6,11 +6,11 @@ import edu.bu.met.cs665.deliverysystem.Dispatch;
 import edu.bu.met.cs665.stores.SystemStores;
 import org.junit.Test;
 
-public class SetupSystemTest {
+public class PrimarySimulatorTest {
 
     @Test
     public void createSimulation() {
-        SetupSystem testSystem = new SetupSystem();
+        PrimarySimulator testSystem = new PrimarySimulator();
         Dispatch dispatch = Dispatch.getInstance();
         testSystem.createSimulation(10,10,30,100, 5);
         SystemStores systemStores = SystemStores.getInstance();

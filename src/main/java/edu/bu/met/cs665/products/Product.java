@@ -2,10 +2,13 @@ package edu.bu.met.cs665.products;
 
 public interface Product {
 
-    boolean isKeepCold();
-    boolean isKeepWarm();
-    int getQuantity();
-    void setQuantity(int quantity);
-   // ProductNames.Names productName = ProductNames.Names.chocolates;
-    ProductNames.Names getProductName();
+    boolean isKeepCold(); //does it need to be kept cold
+
+    boolean isKeepWarm(); //does it need to be kept warm
+
+    int getQuantity(); //quantity needed
+
+    void setQuantity(int quantity); //update the quantity as needed
+
+    ProductNames.Names getProductName(); //return the name of the product
 }

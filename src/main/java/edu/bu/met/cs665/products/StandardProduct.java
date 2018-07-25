@@ -4,9 +4,13 @@ class StandardProduct extends BaseProduct {
     StandardProduct(){
         super();
     }
-    //create a product that is fine at room temp
-    StandardProduct(ProductNames.Names name, int quantity){
-        super(false,false, name,quantity);
+    /**
+     * Standard food object set super class leave keepCold and keepWarm false
+     * @param productType - type of standard product
+     * @param quantity - quantity of standard product
+     */
+    StandardProduct(ProductNames.Names productType, int quantity){
+        super(false,false, productType,quantity);
     }
 
 }

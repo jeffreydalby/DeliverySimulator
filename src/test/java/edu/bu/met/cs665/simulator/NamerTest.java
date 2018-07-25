@@ -1,5 +1,6 @@
 package edu.bu.met.cs665.simulator;
 
+import edu.bu.met.cs665.simulator.namingsystem.StoreNamer;
 import edu.bu.met.cs665.stores.StoreTypes;
 import org.junit.Test;
 

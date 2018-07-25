@@ -32,6 +32,14 @@ public class BaseProduct implements Product {
     public BaseProduct() {
     }
 
+    /**
+     * Create a product
+     *
+     * @param keepCold    - must it be kept cold
+     * @param keepWarm    - must it be kept warm
+     * @param productName - name of the product
+     * @param quantity    - quantity of the product
+     */
     public BaseProduct(boolean keepCold, boolean keepWarm, ProductNames.Names productName, int quantity) {
         this.keepCold = keepCold;
         this.keepWarm = keepWarm;
