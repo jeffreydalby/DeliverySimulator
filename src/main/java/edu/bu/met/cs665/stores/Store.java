@@ -1,7 +1,7 @@
 package edu.bu.met.cs665.stores;
 
-import edu.bu.met.cs665.products.BaseProduct;
-import edu.bu.met.cs665.products.Product;
+import edu.bu.met.cs665.stores.products.BaseProduct;
+import edu.bu.met.cs665.stores.products.Product;
 
 import java.awt.*;
 import java.util.ArrayList;

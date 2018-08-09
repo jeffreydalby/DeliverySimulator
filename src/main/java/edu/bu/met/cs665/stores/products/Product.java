@@ -1,4 +1,4 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
 public interface Product {
 

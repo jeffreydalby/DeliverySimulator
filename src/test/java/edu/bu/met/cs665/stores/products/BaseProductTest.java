@@ -1,4 +1,4 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
 import org.junit.Assert;
 import org.junit.Test;

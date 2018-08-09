@@ -15,7 +15,7 @@ public class Delivery {
 
     void setPickedUp(boolean pickedUp) {
         this.pickedUp = pickedUp;
-        this.pickupTime = clockTickerInstance.getSystemClock();
+        this.pickupTime = clockTickerInstance.getSimulatorClock();
     }
 
     //for future expansion, we could put these in a database and then be abel to search on which were delivered
@@ -25,7 +25,7 @@ public class Delivery {
 
     void setDelivered(boolean delivered) {
         this.delivered = delivered;
-        this.deliveryTime = clockTickerInstance.getSystemClock();
+        this.deliveryTime = clockTickerInstance.getSimulatorClock();
     }
 
     public DeliveryDriver getDeliveryDriver() {
@@ -60,7 +60,7 @@ public class Delivery {
     Delivery(DeliveryDriver driver, Order order) {
         this.driver = driver;
         this.order = order;
-        this.orderSubmittedTime = clockTickerInstance.getSystemClock();
+        this.orderSubmittedTime = clockTickerInstance.getSimulatorClock();
     }
 
     /**

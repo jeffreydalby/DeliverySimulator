@@ -1,7 +1,7 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
-//generic class to hold warm food edu.bu.met.cs665.products
-class WarmFood extends BaseProduct {
+//generic class to hold warm food edu.bu.met.cs665.stores.products
+public class WarmFood extends BaseProduct {
     WarmFood() {
         super();
     }
@@ -12,7 +12,7 @@ class WarmFood extends BaseProduct {
      * @param productType - type of warm food
      * @param quantity    - quantity of warm food
      */
-    WarmFood(ProductNames.Names productType, int quantity) {
+    public WarmFood(ProductNames.Names productType, int quantity) {
         super(false, true, productType, quantity);
     }
 }

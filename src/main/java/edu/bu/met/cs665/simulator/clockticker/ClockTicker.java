@@ -39,13 +39,13 @@ public class ClockTicker implements Runnable {
 
 
 
-    public int getSystemClock() {
-        return this.systemClock;
+    public int getSimulatorClock() {
+        return this.simulatorClock;
     }
 
     //Instead of going off of real time for the simulation (which would take forever)
   //just using an int ticker system clock;
-  private int systemClock;
+  private int simulatorClock;
 
 
 
@@ -54,7 +54,7 @@ public class ClockTicker implements Runnable {
   public void run() {
     while (true) {
       if(Thread.currentThread().isInterrupted()) break;
-      this.systemClock++;
+      this.simulatorClock++;
 
       try {
         Thread.sleep(CLOCK_SPEED);

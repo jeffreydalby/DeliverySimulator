@@ -1,4 +1,4 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
 public class ProductNames {
     //enum to avoid majic strings, in a real system we'd pull this from a database.

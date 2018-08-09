@@ -1,4 +1,4 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
 //could use an abstract factory here but it's just the one item and not needed
 public class BirthDayBox implements Product {
@@ -42,13 +42,17 @@ public class BirthDayBox implements Product {
     /**
      * create a new birthday box
      */
-    BirthDayBox() {
-        this.boxOfChocolates = ProductsFactory.createProduct(ProductNames.Names.chocolates, 1);
-        this.flowerBouquet = ProductsFactory.createProduct(ProductNames.Names.roses, 1);
+    public BirthDayBox() {
+        this.boxOfChocolates = giftFactory(ProductNames.Names.chocolates, 1);
+        this.flowerBouquet = giftFactory(ProductNames.Names.roses, 1);
         this.quantity = 1;
         this.keepWarm = false;
         this.keepCold = false;
         this.productType = ProductNames.Names.giftBox;
+    }
+
+    private Product giftFactory(ProductNames.Names name, int quantity){
+        return new StandardProduct(name,quantity);
     }
 
     //string to output the box and its contents

@@ -1,10 +1,8 @@
 package edu.bu.met.cs665.orders;
 
 import edu.bu.met.cs665.customers.Customer;
-import edu.bu.met.cs665.products.Product;
-import edu.bu.met.cs665.products.ProductNames;
-import edu.bu.met.cs665.products.ProductsFactory;
 import edu.bu.met.cs665.stores.Store;
+import edu.bu.met.cs665.stores.products.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,14 +54,13 @@ public class Order {
     /**
      * create the object from the factory and add to the orderItems list
      *
-     * @param itemToAdd - what items is being orderd
-     * @param quantity  - how many of the item
+     * @param product - what items is being orderd
      */
-    public void addItem(ProductNames.Names itemToAdd, int quantity) {
+    public void addItem(Product product) {
 
-        needsCold = itemToAdd.isKeepCold();
-        needsWarm = itemToAdd.isKeepWarm();
-        orderItems.add(ProductsFactory.createProduct(itemToAdd, quantity));
+        needsCold = product.isKeepCold();
+        needsWarm = product.isKeepWarm();
+        orderItems.add(product);
     }
 
     @Override

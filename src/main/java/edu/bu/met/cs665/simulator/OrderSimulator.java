@@ -8,14 +8,15 @@ import edu.bu.met.cs665.customers.SystemCustomers;
 import edu.bu.met.cs665.deliverysystem.Delivery;
 import edu.bu.met.cs665.deliverysystem.Dispatch;
 import edu.bu.met.cs665.orders.Order;
-import edu.bu.met.cs665.products.Product;
-import edu.bu.met.cs665.products.ProductNames;
+import edu.bu.met.cs665.stores.products.Product;
+import edu.bu.met.cs665.stores.products.ProductNames;
 import edu.bu.met.cs665.stores.Store;
 import edu.bu.met.cs665.stores.SystemStores;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 //The order simulator has the ability to automatically create random orders
 //it can create as many as wanted spread out over a specified time interval between orders
@@ -86,9 +87,7 @@ public class OrderSimulator implements Runnable {
             //pick a random store
             store = SystemStores.getInstance().getStores().get(rnd.nextInt(SystemStores.getInstance().getStores().size()));
             //get the items we can order from the store
-            //last item in the list is always gift box and we don't want people to be able to order that
-            //so size -1;
-            orderItems = store.getStockItems().subList(0, store.getStockItems().size() - 1);
+            orderItems = store.getStockItems();
             //shuffle that list up so we can get some randomness;
             Collections.shuffle(orderItems);
 
@@ -99,15 +98,27 @@ public class OrderSimulator implements Runnable {
             //randomly decide if it is the persons birthday 20% .
             isBirthday = rnd.nextInt(10) < 2;
             if (isBirthday) {
-                order.addItem(ProductNames.Names.giftBox, 1);
+                //Add a gift box, making sure that we have one in the list of items to add
+                if (orderItems.stream().anyMatch(item->item.getProductName().equals(ProductNames.Names.giftBox))) {
+                    Product giftBox =orderItems.stream().filter(item -> item.getProductName().equals(ProductNames.Names.giftBox)).findFirst().orElse(null);
+                    if (giftBox != null) {
+                        giftBox.setQuantity(1);
+                        order.addItem(giftBox);
+                    }
+                }
                 customer.setBirthDay(true);
             }
 
-            //add a random number of things to the order
-            int numOrderItems = (rnd.nextInt(orderItems.size()) + 1);
+            //add a random number of things to the order up
+            //First filter out gift boxes since we don't want people to be able to just order them (they are a promotion given away)
+            List<Product> tempOrderFromList = orderItems.stream().filter(items->items.getProductName()!=ProductNames.Names.giftBox).collect(Collectors.toList());
+            int numOrderItems = (rnd.nextInt(tempOrderFromList.size())+1);
             for (int j = 0; j < numOrderItems; j++) {
+                Product productToAdd = tempOrderFromList.get(j);
                 //allow a random amount up to 5.
-                order.addItem(orderItems.get(j).getProductName(), (rnd.nextInt(5) + 1));
+                productToAdd.setQuantity(rnd.nextInt(5) + 1);
+                //don't add birthday box
+                order.addItem(productToAdd);
             }
 
             systemDispatcher.placeOrder(order);

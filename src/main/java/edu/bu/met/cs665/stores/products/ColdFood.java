@@ -1,10 +1,6 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
-class ColdFood extends BaseProduct {
-
-    ColdFood(){
-        super();
-    }
+public class ColdFood extends BaseProduct {
 
     /**
      * cold food object set super class to keepCold
@@ -12,7 +8,7 @@ class ColdFood extends BaseProduct {
      * @param productType - type of cold food
      * @param quantity    - quantity of cold food
      */
-    ColdFood(ProductNames.Names productType, int quantity) {
+    public ColdFood(ProductNames.Names productType, int quantity) {
         super(true, false, productType, quantity);
     }
 }

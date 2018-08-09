@@ -1,4 +1,4 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
 //base class to products from
 public class BaseProduct implements Product {
@@ -29,7 +29,7 @@ public class BaseProduct implements Product {
     private ProductNames.Names productName; //name of this product
     private int quantity; //quantity for the order (could be used to track store inventory as well)
 
-    public BaseProduct() {
+    BaseProduct() {
     }
 
     /**
@@ -40,7 +40,7 @@ public class BaseProduct implements Product {
      * @param productName - name of the product
      * @param quantity    - quantity of the product
      */
-    public BaseProduct(boolean keepCold, boolean keepWarm, ProductNames.Names productName, int quantity) {
+    BaseProduct(boolean keepCold, boolean keepWarm, ProductNames.Names productName, int quantity) {
         this.keepCold = keepCold;
         this.keepWarm = keepWarm;
         this.productName = productName;

@@ -1,6 +1,6 @@
-package edu.bu.met.cs665.products;
+package edu.bu.met.cs665.stores.products;
 
-class StandardProduct extends BaseProduct {
+public class StandardProduct extends BaseProduct {
     StandardProduct(){
         super();
     }
@@ -9,7 +9,7 @@ class StandardProduct extends BaseProduct {
      * @param productType - type of standard product
      * @param quantity - quantity of standard product
      */
-    StandardProduct(ProductNames.Names productType, int quantity){
+    public StandardProduct(ProductNames.Names productType, int quantity){
         super(false,false, productType,quantity);
     }
 

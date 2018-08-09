@@ -58,7 +58,7 @@ public class PrimarySimulator {
         Display.output("Stopping Clock");
         clockTickerInstance.getClockTickerThread().interrupt();
         Display.output("Simulation Complete"
-                + "\nElapsed Time =" + clockTickerInstance.getSystemClock()
+                + "\nElapsed Time =" + clockTickerInstance.getSimulatorClock()
                 + "\nShutting Down");
 
     }

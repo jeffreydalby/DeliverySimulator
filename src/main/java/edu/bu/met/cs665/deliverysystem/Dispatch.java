@@ -106,7 +106,7 @@ public class Dispatch implements Subject, Runnable {
             //check if we have been interrupted
             if (Thread.currentThread().isInterrupted()) break;
             //check if it is "rush hour" which occurs between ticker time 20 and 80 (won't hit this with less than 20 orders)
-            rushHour = clockTickerInstance.getSystemClock() > 20 && clockTickerInstance.getSystemClock() < 80;
+            rushHour = clockTickerInstance.getSimulatorClock() > 20 && clockTickerInstance.getSimulatorClock() < 80;
             Display.output("Dispatch Update:"
                     + "\nNumber of orders: " + orders.size()
                     + "\nDrivers Waiting on Assignment: " + driverMap.values().stream().filter(DeliveryVehicle::isAvailable).count()

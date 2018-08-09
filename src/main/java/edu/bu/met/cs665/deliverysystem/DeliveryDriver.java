@@ -47,9 +47,6 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
     private boolean warmer; //does the vehicle have a heating compartment/bag to keep food warm
     private boolean cooler; //does the vehicle have a refrigerator to keep food cold
     private boolean available; //are they available for a pickup
-
-
-
     private String driverName; //drivers name
     private Delivery currentDelivery; //what they are delivering
     private int distanceToStore; //how far are they from the store to pick the order up
@@ -117,7 +114,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
      */
     @Override
     public void run() {
-        ClockTicker clockTickerInstance = ClockTicker.getClockTickerInstance();
+
         //loop to continuously run
         while (true) {
 
@@ -138,38 +135,57 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
             if (Thread.currentThread().isInterrupted()) break;
             //if the driver isn't available we can assume he has a delivery to make.
             if (!available && this.currentDelivery != null) {
-
                 //if we are picking up decrement the distance to the store
                 if (pickingUp) {
-                    distanceToStore -= BLOCKS_PER_TICK; //reduce by BLOCKS_PER_TICK
-                    distanceTravelled += BLOCKS_PER_TICK; //Keep track of how far we have gone
-                    //if the distance to store <= 0 we are at the store;
-                    if (distanceToStore <= 0) {
-                        //we made it to the store to pickup
-                        this.currentDelivery.setPickedUp(true);
-                        Display.output("Picking up Order #"
-                                + currentDelivery.getOrder().getOrderNumber() + " at time index: " + clockTickerInstance.getSystemClock()
-                                + "\nFrom: " + this.currentDelivery.getOrder().getStore().getName()
-                                + "\nDelivering to " + this.currentDelivery.getOrder().getCustomer().getAddress()
-                                + "\nOrder waited for " + this.currentDelivery.getWaitTime() + "time units");
-
-                        pickingUp = false;
-                    }
-
+                    moveTowardStore();
                 }
                 //if we aren't available and we aren't picking up, we must be dropping off
                 else {
-                    distanceStoreToCustomer -= BLOCKS_PER_TICK; //reduce by BLOCKS_PER_TICK
-                    distanceTravelled += BLOCKS_PER_TICK; //Keep track of how far we have gone
-                    //if the distance to store <= 0 we are at the customer;
-                    if (distanceStoreToCustomer <= 0) {
-                        this.deliverOrder();  //deliver the order and reset for the next one
-                    }
-
+                    moveTowardCustomer();
                 }
             }
 
         }
+    }
+
+    /**
+     * Move driver toward customer
+     */
+    private void moveTowardCustomer() {
+        distanceStoreToCustomer -= BLOCKS_PER_TICK; //reduce by BLOCKS_PER_TICK
+        distanceTravelled += BLOCKS_PER_TICK; //Keep track of how far we have gone
+        //if the distance to store <= 0 we are at the customer;
+        if (distanceStoreToCustomer <= 0) {
+            this.deliverOrder();  //deliver the order and reset for the next one
+        }
+    }
+
+    /**
+     * Move driver towards store
+     */
+    private void moveTowardStore() {
+
+        distanceToStore -= BLOCKS_PER_TICK; //reduce by BLOCKS_PER_TICK
+        distanceTravelled += BLOCKS_PER_TICK; //Keep track of how far we have gone
+        //if the distance to store <= 0 we are at the store so pick it up
+        if (distanceToStore <= 0) {
+            pickupFromStore();
+        }
+    }
+
+    /**
+     * pickup the order from the store
+     */
+    private void pickupFromStore() {
+        //we made it to the store to pickup
+        this.currentDelivery.setPickedUp(true);
+        Display.output("Picking up Order #"
+                + currentDelivery.getOrder().getOrderNumber() + " at time index: " + ClockTicker.getClockTickerInstance().getSimulatorClock()
+                + "\nFrom: " + this.currentDelivery.getOrder().getStore().getName()
+                + "\nDelivering to " + this.currentDelivery.getOrder().getCustomer().getAddress()
+                + "\nOrder waited for " + this.currentDelivery.getWaitTime() + "time units");
+
+        pickingUp = false;
     }
 
     /**
@@ -181,7 +197,7 @@ public class DeliveryDriver implements Observer, Runnable, DeliveryVehicle {
         this.currentLocation = this.currentDelivery.getOrder().getCustomer().getLocation();
         this.currentDelivery.setDelivered(true);
         this.available = true;
-        Display.output("Delivered Order #" + this.currentDelivery.getOrder().getOrderNumber() + " at time index: " + clockTickerInstance.getSystemClock()
+        Display.output("Delivered Order #" + this.currentDelivery.getOrder().getOrderNumber() + " at time index: " + clockTickerInstance.getSimulatorClock()
                 + "\nDriver Name: " + this.driverName
                 + "\nRefrigerated: " + this.currentDelivery.getRefergerated()
                 + "\nTotal Distance: " + this.distanceTravelled
