@@ -38,6 +38,7 @@ public class DeliveryDriverTest {
         deliveryDriver = new DeliveryDriver("Test Driver", new Point(10,145),true,true);
         order = new Order(customer,store);
         order.addItem(beijingBeef);
+        delivery = new Delivery(deliveryDriver,order);
 
 
     }
@@ -46,7 +47,6 @@ public class DeliveryDriverTest {
     public void updateDelivery() {
 
         deliveryDriver.updateDelivery(delivery);
-        //Assert.assertEquals(deliveryDriver.);
 
     }
 
