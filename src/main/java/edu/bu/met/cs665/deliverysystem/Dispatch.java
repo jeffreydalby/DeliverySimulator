@@ -53,9 +53,8 @@ public class Dispatch implements Subject, Runnable {
     public void registerObserver(String identity, DeliveryVehicle vehicle) {
         //if our driver map already has a driver with this name make it unique by adding
         //the current length of the map to it otherwise we'll loose track of a thread
-        if(driverMap.containsKey(identity))
-        {
-            identity += " #" +driverMap.size();
+        if (driverMap.containsKey(identity)) {
+            identity += " #" + driverMap.size();
             vehicle.setDriverName(identity);
         }
 
@@ -86,13 +85,13 @@ public class Dispatch implements Subject, Runnable {
     @Override
     public void notifyAllObservers() {
         //go through each registered driver and ask for an update
-        driverMap.values().forEach(theDriver->((Observer)theDriver).updateStatus());
+        driverMap.values().forEach(theDriver -> ((Observer) theDriver).updateStatus());
     }
 
     //main automated dispatch system
     @Override
     public void run() {
-         //create a loop to run constantly
+        //create a loop to run constantly
         while (true) {
             //check if we have been interrupted
             if (Thread.currentThread().isInterrupted()) break;
@@ -172,6 +171,7 @@ public class Dispatch implements Subject, Runnable {
 
     /**
      * Find the closest driver that can handle the order
+     *
      * @param order - the order we are trying to handle
      * @return
      */
@@ -182,7 +182,7 @@ public class Dispatch implements Subject, Runnable {
         //make sure we have drivers
         if (!driverMap.isEmpty()) {
             for (DeliveryVehicle vehicle : driverMap.values()
-                    ) {
+            ) {
                 //Available vehicles, if it needs heat make sure we have a heater
                 if (vehicle.isAvailable()) {
                     //if it needs to be heated and the car has no warmer move on
@@ -231,7 +231,7 @@ public class Dispatch implements Subject, Runnable {
         return returnString.toString();
     }
 
-    private boolean isItRushHour(){
+    private boolean isItRushHour() {
         return ClockTicker.getClockTickerInstance().getSimulatorClock() > 20 && ClockTicker.getClockTickerInstance().getSimulatorClock() < 80;
     }
 }
