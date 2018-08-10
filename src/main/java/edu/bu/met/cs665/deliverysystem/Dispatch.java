@@ -98,7 +98,7 @@ public class Dispatch implements Subject, Runnable {
             //output an update of the current dispatch summary
             displayDispatchSummary();
             //process the next order, if we are out of orders break out of the loop
-            if (processNextOrder(orders.removeFirst())) break;
+            if (processNextOrder()) break;
             //display an update from all of our drivers
             this.notifyAllObservers();
             //take a nap to let things process
@@ -113,10 +113,12 @@ public class Dispatch implements Subject, Runnable {
         }
     }
 
-    private boolean processNextOrder(Order nextOrder) {
+    private boolean processNextOrder() {
         DeliveryDriver driver;
         //check for order in the queue and at least one available driver
         if (!orders.isEmpty() && driverMap.values().stream().anyMatch(DeliveryVehicle::isAvailable)) {
+
+            Order nextOrder= orders.removeFirst();
             //get a driver
             driver = getNearestAvailableDriver(nextOrder);
 
