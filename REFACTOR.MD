@@ -1,0 +1,12 @@
+# Refactoring the Order Simulator
+## Purpose
+When the order simulator was created, parts of it were overly complicated, and as is often the case with a tight deadline, some code was "good enough" and met the requirements, but was far from optimal.  By utilizing various refactoring techniques, the code can be made less complex, and more readable.
+
+## Methods Used
+In general I parsed through the code looking for opportunities to make use of the various techniques taught in class. As I read through the code these are how different techniques were used:
+
+- **Improved Design Patterns- Factory Class-> Factory Method** The original implementation used factory classes (which I had mistakenly called factory method classes) to create the various stores. This was done with a factory class for each store, and then a separate class which returned the right type of store based on the enum passed to the method. Even though refactoring required many code changes, including the removal of tests for the eliminated classes, by refactoring the code to use a factory method within the class that needed the Store objects I was able to eliminate four classes.
+- **Extract Method-** There were quite a few opportunities to take lengthy methods and then break them down into multiple methods, each responsible for handling one task. In the Dispatch service's run method, this technique made the "run" method far easier to read. I also used this technique in the Simulator system to enhance its readablility.
+- **Data Organization/Packaging-** The original design had a separate packages for products, and the clockticker used by the simulator was in the main package.  Neither of these original design decisions made sense anymore, and added complexity.  Using the IDE's ability to move paackages and refactor the code, I moved the Products package into a sub-package of stores, since stores don't exist without Products to sell, and in this simulator, products have no use outside of the stores themselves.  The clockticker was moved into the simulator package where it likely should have been all along.
+- **Temporary Fields-** As part of refactoring the Dispatch Service many temporary fields were removed. These were unnecessary, cluttered up the code and made it more difficult to read.
+- **Making Method Calls Simpler-** One of the method calls within the Dispatch service required five parameters. This was unnecessarily complicated and was resolved by simply passing an object to the method which already contained the needed parameters.
