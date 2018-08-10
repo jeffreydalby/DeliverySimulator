@@ -44,10 +44,10 @@ public class GenericStoreBuilder {
         ) {
             Stream.of(ProductNames.Names.values())
                     .filter(name -> name.getProductType() == productTypeOfMenu)
-                    .forEach(name -> menuList.add(this.createProduct(name, 0)));
+                    .forEach(name -> menuList.add(this.productFactoryMethod(name, 0)));
         }
         //As part of the delivery program all stores have a gift box option for birthdays.
-        menuList.add(this.createProduct(ProductNames.Names.giftBox, 1));
+        menuList.add(this.productFactoryMethod(ProductNames.Names.giftBox, 1));
 
         return menuList;
     }
@@ -59,7 +59,7 @@ public class GenericStoreBuilder {
      * @param quantity - quantity needed
      * @return - return the Product object that was created
      */
-    private Product createProduct(ProductNames.Names name, int quantity) {
+    private Product productFactoryMethod(ProductNames.Names name, int quantity) {
 
         if (name.isKeepCold()) return new ColdFood(name, quantity);
         else if (name.isKeepWarm()) return new WarmFood(name, quantity);
